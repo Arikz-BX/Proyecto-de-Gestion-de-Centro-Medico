@@ -1,0 +1,11 @@
+.dashboard-icon i {
+            display: block;
+            font-size: 3em; /* Ajusta el tamaño del icono según sea necesario */
+            margin-bottom: 10px; /* Espacio entre el icono y el texto */
+        }
+        .dashboard-icon img { /* Estilos para los iconos como imágenes */
+            display: block;
+            height: 48px; /* Altura del icono */
+            width: 48px;  /* Ancho del icono */
+            margin-bottom: 10px;
+        }
