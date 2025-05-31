@@ -1,23 +1,24 @@
 <?php
 session_start();
 include('../conexion/conexionbasededatos.php');
-function generarBotonRetorno() {
-    if($_SESSION['tipousuario'] == 'Administrador' || $_SESSION['tipousuario'] == 'Secretario'){
-        echo '<button onclick="window.location.href=\'usuarios.php\'">Ya registre una cuenta.</button>';
-    }else{
-        echo '<button onclick="window.location.href=\'inicio-sesion.php\'">Ya registre una cuenta.</button>';
-    }
-    
-}
+//Removi el Boton de Retorno ya que, no es necesario su uso si los Secretarios y el Admin son los unicos que registran Usuarios.
 ?>
 <script>
-function mostrarMatricula() {
-    document.getElementById("matricula").style.display = "block";
+    //Tuve que cambiar las dos funciones por esta que es mas completa (ya que implemente required al campo de Matricula), ahora usando la misma funcion para los dos Radio se puede registrar ambos usuarios (antes solo registraba Medicos porque el required seguia afectando con el campo oculto)
+function manejarMatricula(){
+    const matriculaDiv = document.getElementById("matricula"); //Ahora se comparte entre los dos casos.
+    const matriculaInput = document.getElementById("inputMatricula");
+    const medicoRadio = document.getElementById("medico");
+
+  if (medicoRadio.checked) {
+    matriculaDiv.style.display = "block";
+    matriculaInput.setAttribute("required", "required");
+  } else {
+    matriculaDiv.style.display = "none";
+    matriculaInput.removeAttribute("required");
   }
-  
-function ocultarMatricula() {
-    document.getElementById("matricula").style.display = "none";
-  }
+}
+document.addEventListener('DOMContentLoaded', manejarMatricula);
 </script>
 
 <!DOCTYPE html>
@@ -31,29 +32,28 @@ function ocultarMatricula() {
     <link rel="icon" href="../estilos/usuarioscheck.ico">
 </head>
 <body>
-    <form action="../acciones/loginreg/registrar.php" method="post">
     <div class="formulario">
         <h1>Registro de Sesion</h1>
-        <div class="username">
+        <form action="../acciones/loginreg/registrar.php" method="post">
+            <div class="username">
             <p>Usuario <input type="text" required placeholder="Ingrese su Nombre" name="usuario"></p>
-        </div>
-        <div class="password">
+            </div>
+            <div class="password">
             <p>Clave <input type="password" maxlength="8" required placeholder="Ingrese su Clave" name="clave"></p>
-        </div>
-        <div class="form-group">
+            </div>
+            <div class="form-group">
             <p>Tipo de Usuario:</p>
-            <input type="radio" name="tipousuario" value="Medico" id="medico" required checked onclick="mostrarMatricula()"> Médico<br>
-            <?php if (isset($_SESSION['tipousuario']) && $_SESSION['tipousuario'] == 'Administrador') {
-                echo '<input type="radio" name="tipousuario" value="Secretario" id="secretario" required onclick="ocultarMatricula()"> Secretario<br>';
-            }
-            ?> 
-        </div>
-        <div class="form-group" id="matricula">
-        <p>Matricula: <input type="id" required placeholder="Ingrese la Matricula" name="matricula"></p>
-        </div>
-    <input type="submit" value="Registrar" name="registrar">
+                <input type="radio" name="tipousuario" value="Medico" id="medico" required checked onclick="manejarMatricula()"> Médico<br>
+                <?php if (isset($_SESSION['tipousuario']) && $_SESSION['tipousuario'] == 'Administrador') {
+                echo '<input type="radio" name="tipousuario" value="Secretario" id="secretario" required onclick="manejarMatricula()"> Secretario<br>';
+                } ?> 
+            </div>
+            <div class="form-group" id="matricula">
+            <p>Matricula: <input type="text" maxlength="12" placeholder="Ingrese la Matricula" name="matricula" id="inputMatricula"></p>
+            </div>
+           <input type="submit" value="Registrar" name="registrar">
     </form>
-    <button onclick="window.location.href='../main/usuarios.php'">Ya registre una cuenta.</button>
-</div>
+        <button onclick="window.location.href='../main/usuarios.php'">Ya registre una cuenta.</button>
+    </div>
 </body>
 </html>

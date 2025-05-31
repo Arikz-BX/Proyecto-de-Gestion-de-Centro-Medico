@@ -27,26 +27,25 @@ if (isset($_POST['logout'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor Secretario</title>
     <link rel="stylesheet" href="../estilos/estiloindex.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 <body>
     <div class="container">
         <h1>Panel de Secretario</h1>
         <div class="dashboard-icons">
-            <div class="dashboard-icon">
-                <a href="usuarios.php">
+                <a href="usuarios.php" class="dashboard-icon">
                    <img src="../estilos/usuarioscheck.ico" alt="Usuarios"> <p>Usuarios</p>
                 </a>
-                <a href="medicos.php">
-                   <img src="../estilos/medicos.ico" alt="Médicos"></i> <p>Medicos</p>
+                <a href="medicos.php" class="dashboard-icon">
+                   <img src="../estilos/medicos.ico" alt="Médicos"> <p>Medicos</p>
                 </a>
-                <div class="dashboard-icon">
-                <a href="listado_pacientes.php">
-                   <img src="../estilos/medicolista.ico" alt="Pacientes"></i> <p>Pacientes</p>
+                <a href="listado_pacientes.php" class="dashboard-icon">
+                   <img src="../estilos/medicolista.ico" alt="Pacientes"> <p>Pacientes</p>
                 </a>
-                <div class="dashboard-icon">
-                <a href="turnos.php">
-                   <img src="../estilos/medicosturnos.ico" alt="Turnos"></i> <p>Turnos</p>
+                <a href="turnos.php" class="dashboard-icon">
+                   <img src="../estilos/medicosturnos.ico" alt="Turnos"> <p>Turnos</p>
                 </a>
+        </div>
     </div>
     <form method="post" style="text-align: right;">
         <button type="submit" method="post" name="logout" id="logout">Cerrar Sesion</button>

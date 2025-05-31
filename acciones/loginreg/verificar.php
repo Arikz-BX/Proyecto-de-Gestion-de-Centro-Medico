@@ -15,6 +15,12 @@ include('../../conexion/conexionbasededatos.php');
 
     if ($resultado->num_rows > 0) {
         $fila = $resultado->fetch_assoc();
+        if ($fila['estado'] == 'Inactivo') {
+            echo '<div class="error">ERROR: Esta cuenta está inactiva. Contacte al administrador.</div>';
+                header('Location: ../../main/inicio-sesion.php?error=usuario_inactivo');
+                exit();
+        }
+
         if (password_verify($clave, $fila['usuarioclave'])) {
             session_regenerate_id(true);
             $_SESSION['nombreusuario'] = $fila['nombreusuario']; // Usar el nombre de usuario de la base de datos
@@ -34,37 +40,30 @@ include('../../conexion/conexionbasededatos.php');
                 } 
                 $stmt_medico->close(); 
             }
-        if ($fila['tipousuario'] == 'Medico') {
-            header("Location: ../../main/index.php");  
-        } elseif ($fila['tipousuario'] == 'Secretario') {
-            header("Location: ../../main/indexsecretario.php");
-        } elseif ($fila['tipousuario'] == 'Administrador') {
-            header("Location: ../../main/indexadmin.php");
-        } else {
-          header("Location: ../../main/index.php");
-          // Usuario no encontrado
-          echo '<div class="error">ERROR DE VERIFICACION: Error de Registro</div>';
-          include('../../main/inicio-sesion.php');
+            
+            if ($fila['tipousuario'] == 'Medico') {
+                header("Location: ../../main/index.php");  
+            } elseif ($fila['tipousuario'] == 'Secretario') {
+                header("Location: ../../main/indexsecretario.php");
+            } elseif ($fila['tipousuario'] == 'Administrador') {
+                header("Location: ../../main/indexadmin.php");
+            } else {
+                // Usuario no encontrado
+                header('Location: ../../main/inicio-sesion.php?error=tipo_usuario_desconocido'); //Esto mostraba mal el formulario jaja
             }
             exit();
         } else {
-        echo '<div class="error">ERROR: Algo salio mal.'; //Este se acciona Si la Contraseña esta mal colocada.
-        include('../../main/inicio-sesion.php');
+        //Este se acciona Si la Contraseña esta mal colocada.
+        header('Location: ../../main/inicio-sesion.php?error=clave_incorrecta');
         exit();
         }
-    } elseif ($fila['estado'] == 'Inactivo') {
-                echo '<div class="error">ERROR: Esta cuenta está inactiva. Contacte al administrador.</div>';
-                include('../../main/inicio-sesion.php');
-                exit(); 
-    } else {
-        echo '<div class="error">ERROR DE VERIFICACION: Usuario no encontrado</div>'; 
-        include('../../main/inicio-sesion.php');
+    } else { 
+        header('Location: ../../main/inicio-sesion.php?error=usuario_no_encontrado');
         exit();
     } 
     $stmt->close(); 
     } else {
-        echo'<div class="error"> ERROR: >' . $enlace->error . '</div>';
-        include('../../main/inicio-sesion.php'); 
+        header('Location: ../../main/inicio-sesion.php?error=error_consulta_db'); 
         exit();
     }  
 $enlace->close();

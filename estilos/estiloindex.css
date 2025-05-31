@@ -1,11 +1,41 @@
-.dashboard-icon i {
-            display: block;
-            font-size: 3em; /* Ajusta el tamaño del icono según sea necesario */
-            margin-bottom: 10px; /* Espacio entre el icono y el texto */
-        }
-        .dashboard-icon img { /* Estilos para los iconos como imágenes */
+.dashboard-icons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Columnas responsivas */
+    gap: 20px; /* Espacio entre los botones */
+    padding: 20px;
+    justify-content: center; /* Centra la cuadrícula si no ocupa todo el ancho */
+}
+.dashboard-icon {
+    display: flex;
+    flex-direction: column; /* Apila la imagen y el texto verticalmente */
+    align-items: center; /* Centra horizontalmente la imagen y el texto */
+    justify-content: center;
+    text-decoration: none;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 15px; /* Espaciado interno del botón */
+    min-width: 120px; /* Ancho mínimo para el botón */
+    height: 120px; 
+    box-sizing: border-box; 
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.dashboard-icon:hover {
+    background-color: #e9ecef; /* Fondo más oscuro al pasar el ratón */
+    transform: translateY(-3px); /* Pequeño efecto de elevación */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+}
+.dashboard-icon img { /* Estilos para los iconos como imágenes */
             display: block;
             height: 48px; /* Altura del icono */
             width: 48px;  /* Ancho del icono */
             margin-bottom: 10px;
         }
+.dashboard-icon p {
+    margin: 0;
+    font-size: 1em; /* Tamaño de fuente del texto */
+    font-weight: 600; /* Opcional: negrita para el texto */
+    line-height: 1.2; /* Altura de línea para el texto */
+    color: #495057; /* Color del texto */
+}

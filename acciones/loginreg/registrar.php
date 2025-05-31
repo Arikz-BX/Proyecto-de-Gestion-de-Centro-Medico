@@ -7,7 +7,7 @@ if(isset($_POST["registrar"])){
     $clave = mysqli_real_escape_string($enlace, $_POST['clave']);
     $tipousuario = mysqli_real_escape_string($enlace, $_POST['tipousuario']);
     $clavehash = password_hash($clave, PASSWORD_DEFAULT);
-    $matricula = mysqli_real_escape_string($enlace, $_POST['matricula']);
+    $matricula = isset($_POST['matricula']) ? $_POST['matricula'] : '';
     //Para el Caso del Usuario que ya Existe.
     $sqluser = "SELECT idusuario, usuarioclave, tipousuario FROM usuarios WHERE nombreusuario = '$nombre'";
     $resultadousuario = $enlace->query($sqluser);
@@ -40,7 +40,7 @@ if(isset($_POST["registrar"])){
 
             if ($tipousuario == 'Medico') {
                 // Inserta en la tabla de médicos
-                $sqlmedico = "INSERT INTO medicos (idusuario, nombrecompleto, matricula) VALUES ('$id_usuario','$nombre' '$matricula')"; //Se guarda el Nombre con la Matricula, esto para que el Medico ya este cargado en Usuarios y Medicos y solo haya que cargar sus otros datos en Agregar Medico
+                $sqlmedico = "INSERT INTO medicos (idusuario, nombrecompleto, matricula) VALUES ('$id_usuario','$nombre', '$matricula')"; //Se guarda el Nombre con la Matricula, esto para que el Medico ya este cargado en Usuarios y Medicos y solo haya que cargar sus otros datos en Agregar Medico
                 $resultado_medico = $enlace->query($sqlmedico);
 
                 if (!$resultado_medico) {
