@@ -3,13 +3,14 @@ session_start();
 include('../../conexion/conexionbasededatos.php');
 
 if(isset($_POST["registrar"])){
-    $nombre = mysqli_real_escape_string($enlace, $_POST['usuario']);
+    $usuario = mysqli_real_escape_string($enlace, $_POST['usuario']);
+    $nombre = mysqli_real_escape_string($enlace, $_POST['nombre']);
     $clave = mysqli_real_escape_string($enlace, $_POST['clave']);
     $tipousuario = mysqli_real_escape_string($enlace, $_POST['tipousuario']);
     $clavehash = password_hash($clave, PASSWORD_DEFAULT);
     $matricula = isset($_POST['matricula']) ? $_POST['matricula'] : '';
     //Para el Caso del Usuario que ya Existe.
-    $sqluser = "SELECT idusuario, usuarioclave, tipousuario FROM usuarios WHERE nombreusuario = '$nombre'";
+    $sqluser = "SELECT idusuario, usuarioclave, tipousuario FROM usuarios WHERE nombreusuario = '$usuario'";
     $resultadousuario = $enlace->query($sqluser);
     
     if ($resultadousuario->num_rows > 0){
@@ -31,7 +32,7 @@ if(isset($_POST["registrar"])){
         mysqli_begin_transaction($enlace);
 
         // Inserta en la tabla de usuarios
-        $sqlusuario = "INSERT INTO usuarios (nombreusuario, usuarioclave, tipousuario) VALUES ('$nombre', '$clavehash', '$tipousuario')";
+        $sqlusuario = "INSERT INTO usuarios (nombreusuario, usuarioclave, tipousuario) VALUES ('$usuario', '$clavehash', '$tipousuario')";
         $resultado_usuario = $enlace->query($sqlusuario);
 
         if ($resultado_usuario) {

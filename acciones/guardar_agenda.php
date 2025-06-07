@@ -7,16 +7,14 @@ if (isset($_POST['guardar_agenda'])) {
     if (!isset($_SESSION['idmedico'])) {
         echo "<script>
                 alert('Error: Sesión de médico no encontrada.');
-                window.location = '../login.php'; // O a donde corresponda
+                window.location = '../inicio-sesion.php';
               </script>";
         exit();
     }
     if (!isset($_POST['fechalaboral'], $_POST['hora_inicio'], $_POST['hora_fin'])) {
         echo "<script>
                 alert('Error: Faltan datos para guardar la agenda.');
-                window.location = '../main/agenda.php';
               </script>";
-        exit();
     }
 
     $idmedico = $_SESSION['idmedico'];
@@ -27,7 +25,6 @@ if (isset($_POST['guardar_agenda'])) {
     if ($fechalaboral < $fecha_actual) {
         echo "<script>
             alert('La fecha de la agenda no puede ser anterior a la fecha actual.');
-            window.location = '../main/agenda.php';
             </script>";
         exit();
     } elseif ($fechalaboral == $fecha_actual) { //Verifica que si es el mismo dia que la hora no este atrasada.
@@ -35,7 +32,6 @@ if (isset($_POST['guardar_agenda'])) {
         if ($hora_inicio < $hora_actual) {
             echo "<script>
                     alert('Error: Si la agenda es para hoy, la hora de inicio no puede ser anterior a la hora actual.');
-                    window.location = '../main/agenda.php';
                   </script>";
             exit();
         }
@@ -43,7 +39,6 @@ if (isset($_POST['guardar_agenda'])) {
      if ($hora_inicio >= $hora_fin) {
         echo "<script>
         alert('La Hora de Inicio no puede ser igual o posterior a la Hora de Salida.');
-        window.location = '../main/agenda.php';
         </script>";
     exit();
     }
@@ -79,7 +74,6 @@ if (isset($_POST['guardar_agenda'])) {
                 $error = "Error al registrar la disponibilidad: " . $stmt->error;
                 echo "<script>
                         alert('$error');
-                        window.location = '../main/agenda.php';
                     </script>";
                 exit();
             }
@@ -88,7 +82,6 @@ if (isset($_POST['guardar_agenda'])) {
             $error = "Error: El ID de médico proporcionado no existe.";
             echo "<script>
                     alert('$error');
-                    window.location = '../main/agenda.php';
                 </script>";
             exit();
         }
@@ -96,7 +89,6 @@ if (isset($_POST['guardar_agenda'])) {
     } else {
         echo "<script>
                 alert('$error');
-                window.location = '../main/agenda.php';
             </script>";
             exit();
     }

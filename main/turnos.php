@@ -20,13 +20,12 @@ include('../funciones/funcionesturnos.php');
 </head>
 <body>
     <div class="container">
-        <h1>Gestion de Turnos</h1>
+        <h1>Turnos</h1>
          <?php if ($tipo_usuario == 'Secretario' || $tipo_usuario == 'Administrador'): ?>
-            <div class="gestion-turnos">
+        <div class="gestion-turnos">
                 <h2>Gestion de Turnos</h2>
-                <div class="container">    
-        <table>
-            <thead>
+                <table>
+                <thead>
                 <tr>
                     <th>ID Turno</th>
                     <th>ID Medico</th>
@@ -36,8 +35,8 @@ include('../funciones/funcionesturnos.php');
                     <th>Observacion</th>
                     <th>Estado</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <?php
                 try {
                     $resultadoTurnos = obtenerListaDeTurnos($enlace);
@@ -65,10 +64,9 @@ include('../funciones/funcionesturnos.php');
                             </form>
                         </tbody>
                     </table>
-                </div>
-
-            <div>
-                <h3>Disponibilidad de Médicos (Agenda)</h3>
+        </div>
+        <div class="agenda-turnos">
+            <h3>Disponibilidad de Médicos (Agenda)</h3>
                     <table>
                         <thead>
                             <tr>
@@ -100,10 +98,10 @@ include('../funciones/funcionesturnos.php');
                             ?>
                         </tbody>
                     </table>
-                </div>
-                <div>
-                    <h3>Notificaciones</h3>
-                    <table>
+        </div>
+        <div class= "turnos-notificaciones">
+                <h3>Notificaciones</h3>
+                <table>
                         <thead>
                             <tr>
                                 <th>Tipo</th>
@@ -113,7 +111,7 @@ include('../funciones/funcionesturnos.php');
                                 <th>Acción</th>
                             </tr>
                         </thead>
-                        <tbody>
+                    <tbody>
                             <?php
                             $resultadoNotificaciones = obtenerNotificaciones($enlace);
                             if ($resultadoNotificaciones->num_rows > 0) {
@@ -145,10 +143,9 @@ include('../funciones/funcionesturnos.php');
                                 exit();
                             }
                             ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                    </tbody>
+                </table>
+        </div>
         <?php elseif ($tipo_usuario == 'Medico'): 
             if (isset($_POST['cancelar_turno'])) {
                 $idturno_a_cancelar = $_POST['idturno_cancelar'];

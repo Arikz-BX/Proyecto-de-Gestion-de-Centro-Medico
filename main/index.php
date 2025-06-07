@@ -43,6 +43,9 @@ if (isset($_POST['logout'])) {
     </div>
     <form method="post" style="text-align: right;">
         <button type="submit" method="post" name="logout" id="logout">Cerrar Sesion</button>
-    </form>  
+    </form>
+    <div class= footer>
+        <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico<h2>        
+    </div>  
 </body>
 </html>

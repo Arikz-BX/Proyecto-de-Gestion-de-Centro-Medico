@@ -33,19 +33,16 @@ if (isset($_POST['idmedico'], $_POST['idpaciente'], $_POST['fecha'], $_POST['lug
 
         if ($lugar != $consultorio_medico) {
             echo "<div class='error'>Error: El turno solo se puede asignar en la dirección del médico: " . $consultorio_medico . "</div>";
-            exit();
         }
         try {
             $fecha_turno = new DateTime($fecha_str, new DateTimeZone('America/Argentina/Buenos_Aires'));
             $fecha_actual = new DateTime(null, new DateTimeZone('America/Argentina/Buenos_Aires'));
         } catch (Exception $e) {
             echo "<div class='error'>Error: Formato de fecha incorrecto.</div>";
-            exit();
         }
 				// Validar que la fecha del turno no sea en el pasado
         if ($fecha_turno < $fecha_actual) {
-            echo "<div class='error'>Error: La fecha del turno debe ser de hoy en adelante.</div>";
-            exit();
+            echo "Error: La fecha del turno debe ser de hoy en adelante.";
         }
 
         // Validar si el turno está dentro del horario de agenda del médico
@@ -75,8 +72,7 @@ if (isset($_POST['idmedico'], $_POST['idpaciente'], $_POST['fecha'], $_POST['lug
         $stmt_agenda->close();
 
         if (!$turno_en_agenda) {
-             echo "<div class='error'>Error: El turno está fuera del horario de agenda del médico.</div>";
-             exit();
+             header('Location: ../../main/registro-turnos.php?error=turno_fuera_agenda'); //Cambiada la logica de como mostrar los Errores.
         }
         $consulta = "INSERT INTO turnos (idmedico, idpaciente, nombrepaciente, nombremedico, fecha, lugar, observacion, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
           $stmt = $enlace->prepare($consulta);
@@ -88,21 +84,19 @@ if (isset($_POST['idmedico'], $_POST['idpaciente'], $_POST['fecha'], $_POST['lug
                 header("Location: ../main/turnos.php");
                 exit();
             } else {
-                echo "Error al registrar turno: " . $stmt->error;
+                header ('Location: ../../main/registro-turnos.php?error=fallo_de_registro'); //Cambiada la logica de como mostrar los Errores.
             }
 
             $stmt->close();
         } else {
-            echo "Error en la preparación de la consulta: " . $enlace->error;
+            header ('Location: ../../main/registro-turnos.php?error=error_consulta_db'); //Cambiada la logica de como mostrar los Errores.
         }
     } else {
-        echo "Error: No se encontró el consultorio del médico.";
-        exit();
+        header ('Location: ../../main/registro-turnos.php?error=consultorio_no_encontrado'); //Cambiada la logica de como mostrar los Errores.
     }
     $stmt_medico->close();
     $stmt_paciente->close();
 } else {
-    echo "Error: No se recibieron todos los datos del formulario.";
-    exit();
+    header ('Location: ../../main/registro-turnos.php?error=datos_faltantes_formulario_'); //Cambiada la logica de como mostrar los Errores.
 }
 ?> 

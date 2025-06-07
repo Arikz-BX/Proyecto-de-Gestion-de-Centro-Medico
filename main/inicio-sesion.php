@@ -1,11 +1,11 @@
 <?php
 session_start();
 include('../conexion/conexionbasededatos.php');
-$mensaje_error = '';
+$mensaje_error = "";
 if (isset($_GET['error'])) {
     $error_code = $_GET['error'];
 
-    // Usar un switch para manejar los diferentes códigos de error.
+    // Se usa un SWITCH para cada caso de error.
     switch ($error_code) {
         case 'clave_incorrecta':
             $mensaje_error = "ERROR: Contraseña incorrecta. Por favor, inténtelo de nuevo.";
@@ -26,6 +26,11 @@ if (isset($_GET['error'])) {
             $mensaje_error = "ERROR: Algo salió mal. Por favor, inténtelo de nuevo.";
             break;
     }
+    echo "<script>";
+    echo "alert('" . htmlspecialchars($mensaje_error, ENT_QUOTES, 'UTF-8'). "');"; //Linea cambiada a peticion de los Profesores, caja de alerta para el error.
+    echo "window.history.replaceState({}, document.title, window.location.pathname);"; //Linea de Codigo usada para que el ALERT no se muestre al recargar la misma pagina.
+    echo "</script>";
+    //{}: Es el objeto state (en este caso, vacío). document.title: Es el título de la página. window.location.pathname: Le dice al navegador que reemplace la URL actual con la ruta del archivo (ejemplo, /main/inicio-sesion.php), eliminando cualquier parámetro GET (?error=...)//      
 }
 //Ahora se usa GET para conseguir el error, el uso de GET en este caso esta bien porque no maneja informacion de la base de datos si no que solo el error para mostrar el mensaje.
 ?>
@@ -43,12 +48,7 @@ if (isset($_GET['error'])) {
     <form action="../acciones/loginreg/verificar.php" method="post">
     <div class="formulario">
         <h1>Inicio de Sesion</h1>
-        <?php
-        // Mostrar el mensaje de error si existe
-        if (!empty($mensaje_error)) {
-            echo '<div class="error">' . htmlspecialchars($mensaje_error) . '</div>';
-        }
-        ?>
+        <!--// Mostrar el mensaje de error si existe, ACTUALIZADO: 5/6/25 cambiado a caja ALERT.-->
         <div class="username">
             <p>Usuario <input type="text" required placeholder="Ingrese su Nombre" name="usuario"></p>
         </div>

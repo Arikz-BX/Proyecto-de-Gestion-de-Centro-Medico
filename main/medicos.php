@@ -26,8 +26,10 @@ function generarBotonRetorno() {
     <link rel="icon" href="../estilos/medicos.ico">
 </head>
 <body>
-    <div class="container">    
-        <table>
+    <div class="container">
+        <div class="lista-medicos">
+            <h2>Listado de Medicos</h2>
+            <table>
             <thead>
                 <tr>
                     <th>ID Medico</th>
@@ -43,6 +45,7 @@ function generarBotonRetorno() {
                     <th>ID Usuario</th>
                     <th>Acciones</th>
                 </tr>
+                </div> 
             </thead>
             <tbody>
                 <?php
@@ -88,12 +91,14 @@ function generarBotonRetorno() {
             } catch (Exception $ex){
                 echo "<tr><td coldspan='8'>Error: " . $ex->getMessage() . "</td></tr>";   
             }
-            ?>   
-        </tbody>
-    </table>
-    <a href="../main/agregar-medico.php" id="agregar">
-    <button href="../main/agregar-medico.php" id="agregar" type="submit" class="button">Agregar Médico</button>
-    </a>
+            ?>      
+            </tbody>
+            </table>
+        </div>
+        <a href="../main/agregar-medico.php" id="agregar">
+            <button href="../main/agregar-medico.php" id="agregar" type="submit" class="button">Agregar Médico</button>
+        </a>
+    </div>
     <?php generarBotonRetorno(); //Para el boton de Retorno que aplique a Secretarios y Administrador.?>
 </body>
 </html>

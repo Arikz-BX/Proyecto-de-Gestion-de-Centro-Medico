@@ -1,3 +1,33 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Verdana;
+    background: linear-gradient(150deg, #152441, #3a2c46);
+    min-height: 100vh;
+}
+.container h1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #c0c0c0;
+    width: 400px;
+    margin: 0 auto 30px auto;
+    padding: 20px;
+    text-align: center;
+    color: #4b4b4b;
+    text-shadow: -1px 0 black, 1px 0 black, 0 -1px black, 0  1px black; /* Este se usa para el Contorno */
+}
+/* .dropdown {
+    display: flex;
+    align-items: right;
+    justify-content: right;
+    background: #c0c0c0;
+    width: 100px;
+    padding: 20px;
+    text-align: center;
+    color: #4b4b4b;
+    text-shadow: -1px 0 black, 1px 0 black, 0 -1px black, 0  1px black; /* Este se usa para el Contorno */
+    /* Desplegable */
 .dashboard-icons {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Columnas responsivas */
@@ -11,9 +41,10 @@
     align-items: center; /* Centra horizontalmente la imagen y el texto */
     justify-content: center;
     text-decoration: none;
-    border: 1px solid #dee2e6;
+    border: 1px solid #959596;
     border-radius: 12px;
     padding: 15px; /* Espaciado interno del botón */
+    background: #e9ecef;
     min-width: 120px; /* Ancho mínimo para el botón */
     height: 120px; 
     box-sizing: border-box; 
@@ -38,4 +69,12 @@
     font-weight: 600; /* Opcional: negrita para el texto */
     line-height: 1.2; /* Altura de línea para el texto */
     color: #495057; /* Color del texto */
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    z-index: -1; /* Para evitar superposicion */
+    background-color: #c0c0c0;
+    text-shadow: -1px 0 black, 1px 0 black, 0 -1px black, 0  1px black; /* Este se usa para el Contorno */
 }

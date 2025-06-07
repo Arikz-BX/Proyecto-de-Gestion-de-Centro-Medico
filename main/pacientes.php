@@ -29,26 +29,18 @@ include('../acciones/registrar_pacientes.php')
     <div class="container">
         <h1>Registro de Nuevo Paciente</h1>
         <form action="../acciones/registrar_pacientes.php" method="post">
-            <div class="form-group">
+            <div class="formulario">
                 <p>Nombre Paciente: <input type="text" required placeholder="Ingrese el Nombre" name="nombrepaciente"></p>
-            </div>
-            <div class="form-group">
                 <p>DNI: <input type="text" id="dni" minlength="8" required placeholder="Ingrese el Documento" name="dni"></p>
-            <div class="form-group">
                 <p>Obra Social: <input type="text" id="obrasocial" required placeholder="Ingrese la Obra Social" minlength="6" name="obrasocial"></p>
-            <div class="form-group">
                 <p>Direccion: <input type="text" id="direccion" required placeholder="Ingrese Direccion" minlength="9" name="direccion"></p>
-            <div class="form-group">
                 <p>Telefono: <input type="text" id="telefono" required placeholder="Ingrese Contacto Telefonico" minlength="9" name="telefono"></p>
-            <div class="form-group">
                 <p>Correo Electronico: <input type="text" id="correoelectronico" placeholder="Ingrese Correo de Contacto" name="correoelectronico"></p>
-            <div class="form-group">
                 <label for="notas">Notas Adicionales:</label>
                 <textarea id="notas" name="notas"></textarea>      
-         <button type="submit" name="guardar_paciente">Guardar Paciente</button>
+                <button type="submit" name="guardar_paciente">Guardar Paciente</button>
+            </div>
     </form>
-
-    <div class="button-container">
             <a href="listado_pacientes.php" class="button">Listado de Pacientes</a>
             <?php generarBotonRetorno(); //Para el boton de Retorno que aplique a Secretarios y Administrador.?>
 </div>

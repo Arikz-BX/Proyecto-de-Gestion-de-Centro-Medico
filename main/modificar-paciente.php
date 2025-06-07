@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../conexion/conexionbasededatos.php');
-var_dump($_SESSION);
+// var_dump($_SESSION);
 if (!isset($_SESSION['tipousuario'])) {
     header("Location: inicio-sesion.php"); 
     exit();
@@ -95,7 +95,7 @@ $enlace->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pacientes: Modificar Paciente</title>
-    <link rel="stylesheet" href="../estilos/estilologin.css">
+    <link rel="stylesheet" href="../estilos/estilogestores.css">
     <link rel="icon" href="../estilos/medicoslista.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
@@ -155,7 +155,7 @@ $enlace->close();
                 </div>
                 <div class="form-group">
                     <button type="submit" name="guardar">Guardar Cambios</button>
-                    <a href="../main/pacientes.php" class="button" onclick="return confirm('¿Estás seguro de que deseas cancelar los cambios?');">Cancelar</a>
+                    <a href="../main/listado-pacientes.php" class="button" onclick="return confirm('¿Estás seguro de que deseas cancelar los cambios?');">Cancelar</a>
                 </div>
             </form>
         <?php else: ?>

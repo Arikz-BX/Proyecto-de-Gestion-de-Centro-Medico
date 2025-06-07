@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../conexion/conexionbasededatos.php');
-var_dump($_SESSION);
+// var_dump($_SESSION);
 if (!isset($_SESSION['tipousuario'])) {
     header("Location: inicio-sesion.php"); 
     exit();

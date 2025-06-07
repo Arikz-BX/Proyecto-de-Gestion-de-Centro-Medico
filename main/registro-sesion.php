@@ -33,13 +33,16 @@ document.addEventListener('DOMContentLoaded', manejarMatricula);
 </head>
 <body>
     <div class="formulario">
-        <h1>Registro de Sesion</h1>
+        <h1>Guardar Usuario</h1>
         <form action="../acciones/loginreg/registrar.php" method="post">
             <div class="username">
-            <p>Usuario <input type="text" required placeholder="Ingrese su Nombre" name="usuario"></p>
+            <p>Usuario <input type="text" required placeholder="Ingrese un Usuario" name="usuario"></p>
             </div>
             <div class="password">
-            <p>Clave <input type="password" maxlength="8" required placeholder="Ingrese su Clave" name="clave"></p>
+            <p>Clave <input type="password" maxlength="8" required placeholder="Ingrese una Clave" name="clave"></p>
+            </div>
+            <div class="nombrepersonal">
+            <p>Nombre <input type="text" required placeholder="Ingrese el Nombre" name="nombre"></p>
             </div>
             <div class="form-group">
             <p>Tipo de Usuario:</p>

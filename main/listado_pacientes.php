@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../conexion/conexionbasededatos.php');
-var_dump($_SESSION);
+// var_dump($_SESSION);
 function obtenerListaDePacientes($enlace) {
     $sql = "SELECT * FROM pacientes";
     $resultado = $enlace->query($sql);
@@ -28,9 +28,11 @@ function generarBotonRetorno() {
     <link rel="icon" href="../estilos/medicoslista.ico">
 </head>
 <body>
-    <div class="container">    
-        <table>
-            <thead>
+    <div class="container">
+        <div class= "lista-pacientes">
+            <h2>Listado de Pacientes</h2>
+            <table>
+                <thead>
                 <tr>
                     <th>ID Paciente</th>
                     <th>Nombre Completo</th>
@@ -41,6 +43,7 @@ function generarBotonRetorno() {
                     <th>Correo</th>
                     <th>Notas</th>
                     <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,29 +53,45 @@ function generarBotonRetorno() {
                     $resultado = obtenerListaDePacientes($enlace);
                     if ($resultado->num_rows > 0) {
                         while ($row = $resultado->fetch_assoc()) {
-                        $idpaciente = $row['idpaciente'];
-                        echo "<tr>
-                        <td>{$row['idpaciente']}</td>
-                        <td>{$row['nombrepaciente']}</td>
-                        <td>{$row['dni']}</td>
-                        <td>{$row['obrasocial']}</td>
-                        <td>{$row['direccion']}</td>
-                        <td>{$row['telefono']}</td>
-                        <td>{$row['correoelectronico']}</td>
-                        <td>{$row['notas']}</td>
-                        <td>{$row['estado']}</td>
-                        <td>
-                        <form action='../main/modificar-paciente.php' method='post' style='display:inline;'>
-                            <input type='hidden' name='idpaciente' value='{$idpaciente}'>
-                            <button type='submit' class='boton-modificar'>Modificar</button>
-                        </form> 
-                        <form action='../acciones/pacientes/eliminar_paciente.php' method='post' style='display:inline'
-                            onsubmit='return confirm(\"¿Estás seguro de que deseas eliminar a este paciente?\")'>
-                            <input type='hidden' name='idpaciente' value='{$idpaciente}'>
-                            <button type='submit'>Eliminar</button>
-                        </form>
-                    </td>
-                </tr>";
+                        $idpaciente = htmlspecialchars($row['idpaciente'], ENT_QUOTES, 'UTF-8');
+                        $estado_paciente = htmlspecialchars($row['estado'], ENT_QUOTES, 'UTF-8');
+                        $clase_fila = '';
+                        if ($estado_paciente == 'Activo') {
+                            $clase_fila = 'fila-paciente-activo';
+                        } elseif ($estado_paciente == 'Inactivo') {
+                            $clase_fila = 'fila-paciente-inactivo';
+                        }
+                        
+                        echo '<tr class= "' . $clase_fila . '">';
+                        echo "<td>" . $idpaciente . "</td>";
+                        echo "<td>" . htmlspecialchars($row['nombrepaciente'], ENT_QUOTES, 'UTF-8') . "</td>";
+                        echo "<td>" . htmlspecialchars($row['dni'], ENT_QUOTES, 'UTF-8') . "</td>";
+                        echo "<td>" . htmlspecialchars($row['obrasocial'], ENT_QUOTES, 'UTF-8') . "</td>";
+                        echo "<td>" . htmlspecialchars($row['direccion'], ENT_QUOTES, 'UTF-8') . "</td>";
+                        echo "<td>" . htmlspecialchars($row['telefono'], ENT_QUOTES, 'UTF-8') . "</td>";
+                        echo "<td>" . htmlspecialchars($row['correoelectronico'], ENT_QUOTES, 'UTF-8') . "</td>";
+                        echo "<td>" . htmlspecialchars($row['notas'], ENT_QUOTES, "UTF-8") . "</td>";
+                        $clase_badge_estado = '';
+                        if($estado_paciente == 'En Tratamiento'){
+                            $clase_badge_estado = 'text-bg-success';
+                        } elseif ($estado_paciente == 'En Espera') {
+                            $clase_badge_estado = 'text-bg-danger';
+                        } else {
+                            $clase_badge_estado = 'text-bg-secondary';
+                        }
+                        echo '<td><span class="badge '. $clase_badge_estado . '">' . $estado_paciente . '</span></td>';
+        
+                        echo "<td>";
+                        echo "<form action='../main/modificar-paciente.php' method='post' style='display:inline;'>";
+                            echo "<input type='hidden' name='idpaciente' value='{$idpaciente}'>";
+                            echo "<button type='submit' class='boton-modificar'>Modificar</button>";
+                        echo "</form>"; 
+                        echo "<form action='../acciones/pacientes/eliminar_paciente.php' method='post' style='display:inline' onsubmit='return confirm(\"¿Estás seguro de que deseas eliminar a este paciente?\")'>";
+                            echo "<input type='hidden' name='idpaciente' value='" . $idpaciente. "'>";
+                            echo "<button type='submit' class='boton-eliminar'>Eliminar</button>";
+                        echo "</form>";
+                    echo "</td>";
+                echo "</tr>";
                     }
                 } else {
                     echo "<tr><td colspan='8'>No hay pacientes registrados.</td></tr>";
@@ -80,12 +99,14 @@ function generarBotonRetorno() {
             } catch (Exception $ex){
                 echo "<tr><td coldspan='8'>Error: " . $ex->getMessage() . "</td></tr>";   
             }
-            ?>   
-        </tbody>
-    </table>
-    <a href="../main/pacientes.php" class="button">
-    <button type="submit" class="button">Agregar Paciente</button>
-    </a>
+            ?>       
+            </tbody>
+            </table>
+            <a href="../main/pacientes.php" class="button">
+                <button type="submit" class="button">Agregar Paciente</button>
+            </a>
+        </div>    
+    </div>
     <?php generarBotonRetorno(); //Para el boton de Retorno que aplique a Secretarios y Administrador.?>
 </body>
 </html>
