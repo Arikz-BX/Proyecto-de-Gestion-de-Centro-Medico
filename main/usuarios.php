@@ -12,16 +12,6 @@ function obtenerListaDeUsuarios($enlace) {
     return $resultado;
 }
 
-function generarBotonRetorno() {
-    if (isset($_SESSION['tipousuario'])){
-        if($_SESSION['tipousuario'] == 'Administrador'){
-            echo '<button onclick="window.location.href=\'indexadmin.php\'">Regresar al Inicio.</button>';
-        } elseif($_SESSION['tipousuario'] == 'Secretario'){
-            echo '<button onclick="window.location.href=\'indexsecretario.php\'">Regresar al Inicio.</button>';
-        }
-    }
-}
-
 $mensaje_toast = '';
 $tipo_toast = '';
 
@@ -30,6 +20,10 @@ if (isset($_GET['success'])) {
     switch ($codigo_efectivo) {
         case 'usuario_inactivado':
             $mensaje_toast = '¡Usuario inactivado correctamente!';
+            $tipo_toast = 'success';
+            break;
+        case 'usuario_reactivado':
+            $mensaje_toast = '¡Usuario reactivado correctamente!';
             $tipo_toast = 'success';
             break;
         case 'usuario_modificado':
@@ -78,7 +72,8 @@ if (isset($_GET['success'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container">
+<?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
+<div class="container">
         <h1>Gestión de Usuarios</h1>
         <div class="lista-usuarios">
             <h2>Lista de Usuarios</h2>
@@ -126,11 +121,18 @@ if (isset($_GET['success'])) {
                         echo "</form>"; 
                         //}
                         if ($fila_usuario["nombreusuario"] != $_SESSION['nombreusuario']) { //Previene que se borre a si mismo el Secretario/Administrador.
-                        echo "<form action='../acciones/usuarios/eliminar_usuario.php'  method='post' style='display:inline' onsubmit='return confirm(\"¿Estás seguro de que deseas eliminar a este usuario?\")'>";
-                        echo "<input type='hidden' name='idusuario' value=". $id ."'>";
-                        echo "<button type='submit'>Eliminar</button>";
-                        echo "</form>";
-                }
+                            if ($estado_usuario == 'Activo'){
+                                echo "<form action='../acciones/usuarios/eliminar_usuario.php'  method='post' style='display:inline' onsubmit='return confirm(\"¿Estás seguro de que deseas dar de baja a este usuario?\")'>";
+                                echo "<input type='hidden' name='idusuario' value='". htmlspecialchars($id) ."'>";
+                                echo "<button type='submit'>Dar de Baja</button>";
+                                echo "</form>";
+                            } elseif ($estado_usuario == 'Inactivo') {
+                                echo "<form action='../acciones/usuarios/reactivar_usuario.php'  method='post' style='display:inline' onsubmit='return confirm(\"¿Estás seguro de que deseas reactivar a este usuario?\")'>";
+                                echo "<input type='hidden' name='idusuario' value='". htmlspecialchars($id) ."'>";
+                                echo "<button type='submit'>Dar de Alta</button>";
+                                echo "</form>";
+                            }
+                        }
                         echo "</td>";
                         echo "</tr>";
             }
@@ -145,24 +147,23 @@ if (isset($_GET['success'])) {
             <?php } else { ?>
             <p>No tienes permiso para modificar esta tabla.</p> 
             <?php } ?>
-    </div>
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="liveToast" class="toast align-items-center text-white bg-<?php echo $tipo_toast; ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
                     <?php echo htmlspecialchars($mensaje_toast); ?>
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
-            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</div>
 
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', function() {
             // PHP pasa el mensaje a JavaScript
             const mensajeToast = "<?php echo addslashes($mensaje_toast); ?>";
-            
+               
             if (mensajeToast) {
                 const toastLiveExample = document.getElementById('liveToast');
                 const toast = new bootstrap.Toast(toastLiveExample);
@@ -172,7 +173,11 @@ if (isset($_GET['success'])) {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         });
-    </script>
-<?php generarBotonRetorno(); //Para el boton de Retorno que aplique a Secretarios y Administrador.?>
+</script> 
+</div> <!-- 9/6 Necesario para dividir y que se vea bien el Footer -->
+<div class= footer>
+    <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -100,6 +100,7 @@ $enlace->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 <body>
+    <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
         <h1>Modificar Paciente</h1>
 
@@ -110,50 +111,36 @@ $enlace->close();
             <form action="modificar-paciente.php" method="post">
                 <input type="hidden" name="idpaciente" value="<?= $idpaciente ?>">
 
-                <div class="form-group">
+                <div class="formulario">
                     <label for="nombrepaciente">Nombre del Paciente:</label>
-                    <input type="text" id="nombrepaciente" name="nombrepaciente"
+                    <input type="text" id="nombrepaciente" name="nombrepaciente" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$"
                             value="<?= htmlspecialchars($nombrepaciente) ?>" required>
-                </div>
-                <div class="form-group">
                     <label for="dni">DNI:</label>
                     <input type="text" id="dni" name="dni"
                             value="<?= htmlspecialchars($dni) ?>" required>
-                </div>
-                <div class="form-group">
                     <label for="obrasocial">Obra Social:</label>
                     <input type="text" id="obrasocial" name="obrasocial"
                             value="<?= htmlspecialchars($obrasocial) ?>" required>
-                </div>
-                 <div class="form-group">
                     <label for="direccion">Direccion:</label>
-                    <input type="text" id="direccion" name="direccion"
+                    <input type="text" id="direccion" name="direccion
                             value="<?= htmlspecialchars($direccion) ?>" required>
-                </div>
-                <div class="form-group">
                     <label for="telefono">Telefono:</label>
                     <input type="text" id="telefono" name="telefono"
                             value="<?= htmlspecialchars($telefono) ?>" required>
-                </div>
-                <div class="form-group">
                     <label for="correoelectronico">Correo:</label>
                     <input type="text" id="correoelectronico" name="correoelectronico"
                             value="<?= htmlspecialchars($correo) ?>" required>
-                </div>
-                <div class="form-group">
                     <label for="estado">Estado:</label>
                     <select type="option" id="estado" name="estado" required>
                     <option value="En Espera" <?php if ($estado === 'En Espera') echo 'selected'; ?>>En Espera</option>
                     <option value="En Tratamiento" <?php if ($estado === 'En Tratamiento') echo 'selected'; ?>>En Tratamiento</option>
                     <option value="Dado de Alta" <?php if ($estado === 'Dado de Alta') echo 'selected'; ?>>Dado de Alta</option>
                     </select>
-                </div>
-                <div class="form-group">
                     <label for="notas">Notas:</label>
                     <input type="text" id="notas" name="notas"
                             value="<?= htmlspecialchars($notas) ?>" required>
                 </div>
-                <div class="form-group">
+                <div class="formulario">
                     <button type="submit" name="guardar">Guardar Cambios</button>
                     <a href="../main/listado-pacientes.php" class="button" onclick="return confirm('¿Estás seguro de que deseas cancelar los cambios?');">Cancelar</a>
                 </div>
@@ -163,5 +150,9 @@ $enlace->close();
             <a href="../main/listado-pacientes.php" class="button">Volver a la lista de pacientes</a>
         <?php endif; ?>
     </div>
+    <div class= footer>
+        <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -5,6 +5,11 @@ body{
     background: linear-gradient(150deg, #008064, #461b4e);
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 30px;
+    box-sizing: border-box;
 }
 .formulario{
     position: absolute;
@@ -89,4 +94,14 @@ form .nombrepersonal{
     border: none;
     background: none;
     outline: none;
+}
+
+.footer {
+    position: absolute;
+    margin-top: auto;
+    bottom: 0;
+    width: 100%;
+    z-index: -1; /* Para evitar superposicion */
+    background-color: #c0c0c0;
+    text-shadow: -1px 0 black, 1px 0 black, 0 -1px black, 0  1px black; /* Este se usa para el Contorno */
 }

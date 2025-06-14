@@ -7,15 +7,66 @@ function obtenerListaDePacientes($enlace) {
     $resultado = $enlace->query($sql);
     return $resultado;
 }
-function generarBotonRetorno() {
-    if (isset($_SESSION['tipousuario'])){
-        if($_SESSION['tipousuario'] == 'Administrador'){
-            echo '<button onclick="window.location.href=\'indexadmin.php\'">Regresar al Inicio.</button>';
-        } elseif($_SESSION['tipousuario'] == 'Secretario'){
-            echo '<button onclick="window.location.href=\'indexsecretario.php\'">Regresar al Inicio.</button>';
-        }
+$mensaje_toast = '';
+$tipo_toast = '';
+
+if (isset($_GET['success'])) {
+    $codigo_efectivo = $_GET['success'];
+    switch ($codigo_efectivo) {
+        case 'paciente_dado_de_alta':
+            $mensaje_toast = '!Paciente dado de alta correctamente!';
+            $tipo_toast = 'success';
+            break;
+        case 'paciente_reactivado':
+            $mensaje_toast = '¡Paciente reactivado correctamente!';
+            $tipo_toast = 'success';
+            break;
+        case 'paciente_modificado':
+            $mensaje_toast = '¡Paciente modificado correctamente!';
+            $tipo_toast = 'success';
+            break;
+        case 'paciente_registrado':
+            $mensaje_toast = '¡Paciente registrado correctamente!';
+            $tipo_toast = 'success';
+            break;
+        default:
+            $mensaje_toast = '¡Operacion exitosa!';
+            $tipo_toast = 'success';
+    }
+} elseif (isset($_GET['error'])) {
+    $codigo_error = $_GET['error'];
+    $detalle_error = isset($_GET['detalle']) ? htmlspecialchars(urldecode($_GET['detalle'])) : '';
+
+    switch ($codigo_error) {
+        case 'error_al_dar_alta_paciente':
+            $mensaje_toast = 'Error al dar de alta al paciente.';
+            $tipo_toast = 'danger';
+            break;
+        case 'id_paciente_invalido':
+            $mensaje_toast = 'ID de paciente no válido.';
+            $tipo_toast = 'danger';
+            break;
+        case 'paciente_en_tratamiento': 
+            $mensaje_toast = 'No se puede dar de alta al paciente. Tiene turnos activos o futuros.';
+            $tipo_toast = 'warning'; 
+            break;
+        default:
+            $mensaje_toast = 'Ocurrió un error inesperado.';
+            $tipo_toast = 'danger';
+    }
+    if ($detalle_error) {
+        $mensaje_toast .= ' Detalle: ' . $detalle_error;
+    }
+} elseif (isset($_GET['info'])) { 
+    $codigo_info = $_GET['info'];
+    switch ($codigo_info) {
+        case 'paciente_ya_dado_de_alta':
+            $mensaje_toast = 'El paciente ya ha sido dado de alta (inactivo para turnos).';
+            $tipo_toast = 'info';
+            break;
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -28,6 +79,7 @@ function generarBotonRetorno() {
     <link rel="icon" href="../estilos/medicoslista.ico">
 </head>
 <body>
+    <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
         <div class= "lista-pacientes">
             <h2>Listado de Pacientes</h2>
@@ -86,9 +138,9 @@ function generarBotonRetorno() {
                             echo "<input type='hidden' name='idpaciente' value='{$idpaciente}'>";
                             echo "<button type='submit' class='boton-modificar'>Modificar</button>";
                         echo "</form>"; 
-                        echo "<form action='../acciones/pacientes/eliminar_paciente.php' method='post' style='display:inline' onsubmit='return confirm(\"¿Estás seguro de que deseas eliminar a este paciente?\")'>";
+                        echo "<form action='../acciones/pacientes/eliminar_paciente.php' method='post' style='display:inline' onsubmit='return confirm(\"¿Estás seguro de que deseas dar de alta a este paciente?\")'>";
                             echo "<input type='hidden' name='idpaciente' value='" . $idpaciente. "'>";
-                            echo "<button type='submit' class='boton-eliminar'>Eliminar</button>";
+                            echo "<button type='submit' class='boton-eliminar'>Dar el Alta</button>";
                         echo "</form>";
                     echo "</td>";
                 echo "</tr>";
@@ -107,6 +159,24 @@ function generarBotonRetorno() {
             </a>
         </div>    
     </div>
-    <?php generarBotonRetorno(); //Para el boton de Retorno que aplique a Secretarios y Administrador.?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // PHP pasa el mensaje a JavaScript
+            const mensajeToast = "<?php echo addslashes($mensaje_toast); ?>";
+               
+            if (mensajeToast) {
+                const toastLiveExample = document.getElementById('liveToast');
+                const toast = new bootstrap.Toast(toastLiveExample);
+                toast.show();
+
+                // Limpiar la URL después de mostrar el mensaje
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+    </script> 
+<div class= footer>
+        <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>

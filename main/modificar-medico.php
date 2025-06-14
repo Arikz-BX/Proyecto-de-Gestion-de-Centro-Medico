@@ -103,72 +103,62 @@ $enlace->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container">
-        <h1>Modificar Medico</h1>
-
-        <?php if ($error): ?>
-            <p class="error"><?= htmlspecialchars($error) ?></p>
-            <p><a href="../main/medicos.php" class="button">Volver a la lista de medicos</a></p>
-        <?php elseif ($idmedico): ?>
-            <form action="modificar-medico.php" method="post">
-                <input type="hidden" name="idmedico" value="<?= $idmedico ?>">
-
-                <div class="form-group">
-                    <label for="nombremedico">Nombre del Medico:</label>
-                    <input type="text" id="nombremedico" name="nombremedico"
-                            value="<?= htmlspecialchars($nombremedico) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="dni">DNI:</label>
-                    <input type="text" id="dni" name="dni"
-                            value="<?= htmlspecialchars($dni) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="matricula">Matricula:</label>
-                    <input type="text" id="matricula" name="matricula"
-                            value="<?= htmlspecialchars($matricula) ?>" required>
-                </div>
-                 <div class="form-group">
-                    <label for="consultorio">Consultorio:</label>
-                    <input type="text" id="consultorio" name="consultorio"
-                            value="<?= htmlspecialchars($consultorio) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="direccion">Direccion de Domicilio:</label>
-                    <input type="text" id="direccion" name="direccion"
-                            value="<?= htmlspecialchars($direccion) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="telefono">Telefono:</label>
-                    <input type="text" id="telefono" name="telefono"
-                            value="<?= htmlspecialchars($telefono) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="correo">Correo:</label>
-                    <input type="text" id="correo" name="correo"
-                            value="<?= htmlspecialchars($correo) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="especialidad">Especialidad:</label>
-                    <input type="text" id="especialidad" name= "especialidad"
-                            value="<?= htmlspecialchars($especialidad) ?>" required>
-                <div class="form-group">
-                    <label for="estado">Estado:</label>
-                    <select type="option" id="estado" name="estado" required>
-                    <option value="Activo" <?php if ($estado === 'Activo') echo 'selected'; ?>>Activo</option>
-                    <option value="Inactivo" <?php if ($estado === 'Inactivo') echo 'selected'; ?>>Inactivo</option>
-                    <option value="Licencia" <?php if ($estado === 'Licencia') echo 'selected'; ?>>Licencia</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <button type="submit" name="guardar">Guardar Cambios</button>
-                    <a href="../main/medicos.php" class="button" onclick="return confirm('¿Estás seguro de que deseas cancelar los cambios?');">Cancelar</a>
-                </div>
-            </form>
-        <?php else: ?>
-            <p>No se ha seleccionado ningún medico para modificar.</p>
-            <a href="../main/medicos.php" class="button">Volver a la lista de medicos.</a>
-        <?php endif; ?>
+<?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
+<div class="container">
+    <h1>Modificar Medico</h1>
+    
+    <?php if ($error): ?>
+        <p class="error"><?= htmlspecialchars($error) ?></p>
+        <p><a href="../main/medicos.php" class="button">Volver a la lista de medicos</a></p>
+    <?php elseif ($idmedico): ?>
+        <form action="modificar-medico.php" method="post">
+            <input type="hidden" name="idmedico" value="<?= $idmedico ?>">
+    
+            <div class="formulario">
+                <label for="nombremedico">Nombre del Medico:</label>
+                <input type="text" id="nombremedico" name="nombremedico"
+                        value="<?= htmlspecialchars($nombremedico) ?>" required>
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni"
+                        value="<?= htmlspecialchars($dni) ?>" required>
+                <label for="matricula">Matricula:</label>
+                <input type="text" id="matricula" name="matricula"
+                        value="<?= htmlspecialchars($matricula) ?>" required>
+                <label for="consultorio">Consultorio:</label>
+                <input type="text" id="consultorio" name="consultorio"
+                        value="<?= htmlspecialchars($consultorio) ?>" required>
+                <label for="direccion">Direccion de Domicilio:</label>
+                <input type="text" id="direccion" name="direccion"
+                        value="<?= htmlspecialchars($direccion) ?>" required>
+                <label for="telefono">Telefono:</label>
+                <input type="text" id="telefono" name="telefono"
+                        value="<?= htmlspecialchars($telefono) ?>" required>
+                <label for="correo">Correo:</label>
+                <input type="text" id="correo" name="correo"
+                        value="<?= htmlspecialchars($correo) ?>" required>
+                <label for="especialidad">Especialidad:</label>
+                <input type="text" id="especialidad" name= "especialidad"
+                        value="<?= htmlspecialchars($especialidad) ?>" required>
+                <label for="estado">Estado:</label>
+                <select type="option" id="estado" name="estado" required>
+                <option value="Activo" <?php if ($estado === 'Activo') echo 'selected'; ?>>Activo</option>
+                <option value="Inactivo" <?php if ($estado === 'Inactivo') echo 'selected'; ?>>Inactivo</option>
+                <option value="Licencia" <?php if ($estado === 'Licencia') echo 'selected'; ?>>Licencia</option>
+                </select>
+            </div>
+            <div class=formulario-botones>
+                <button type="submit" name="guardar">Guardar Cambios</button>
+                <a href="../main/medicos.php" class="button" onclick="return confirm('¿Estás seguro de que deseas cancelar los cambios?');">Cancelar</a>
+            </div>
+        </form>
+    <?php else: ?>
+        <p>No se ha seleccionado ningún medico para modificar.</p>
+        <a href="../main/medicos.php" class="button">Volver a la lista de medicos.</a>
+    <?php endif; ?>
+</div>
+    <div class= footer>
+    <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
     </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>

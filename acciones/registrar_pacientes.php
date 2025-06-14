@@ -35,7 +35,7 @@ if (isset($_POST['guardar_paciente'])) {
             $success = "Paciente registrado correctamente."; //Registra al paciente sin problemas.
             echo "<script>
                     alert('$success');
-                    window.location = '../main/pacientes.php';
+                    header(../main/listado_pacientes?success=paciente_registrado.php);
                   </script>";
             exit(); 
         } else {

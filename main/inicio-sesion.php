@@ -45,7 +45,7 @@ if (isset($_GET['error'])) {
     <link rel="icon" href="../estilos/usuarios.ico">
 </head>
 <body>
-    <form action="../acciones/loginreg/verificar.php" method="post">
+<form action="../acciones/loginreg/verificar.php" method="post">
     <div class="formulario">
         <h1>Inicio de Sesion</h1>
         <!--// Mostrar el mensaje de error si existe, ACTUALIZADO: 5/6/25 cambiado a caja ALERT.-->
@@ -55,7 +55,11 @@ if (isset($_GET['error'])) {
         <div class="password">
             <p>Clave <input type="password" minlength="8" required placeholder="Ingrese su Clave" name="clave"></p>
         </div>
-    <input type="submit" value="Ingresar">
-</div>
+        <input type="submit" value="Ingresar"> 
+    </div>
+</form>
+    <div class= footer>
+        <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
+    </div>
 </body>
 </html>

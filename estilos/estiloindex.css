@@ -4,6 +4,16 @@ body{
     font-family: Verdana;
     background: linear-gradient(150deg, #152441, #3a2c46);
     min-height: 100vh;
+    align-items: center;
+    justify-content: flex-start;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+header {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #4b4b4b;
 }
 .container h1{
     display: flex;
@@ -71,10 +81,10 @@ body{
     color: #495057; /* Color del texto */
 }
 .footer {
-    position: absolute;
-    bottom: 0;
     width: 100%;
-    z-index: -1; /* Para evitar superposicion */
+    padding: 15px 20px;
+    margin-top: auto; /* 10/6 Corregido Y Añadido Auto al Margin*/
     background-color: #c0c0c0;
     text-shadow: -1px 0 black, 1px 0 black, 0 -1px black, 0  1px black; /* Este se usa para el Contorno */
+    box-sizing: border-box; /* 9/6 Corregido el Absolute con un Box-sizing para que se muestre correctamente dentro del Body.*/
 }

@@ -1,6 +1,6 @@
 <?php
 session_start();
-var_dump($_SESSION);
+/*var_dump($_SESSION);*/
 include('../conexion/conexionbasededatos.php');
 include('../funciones/funcionesturnos.php');
 $medicos = obtenerMedicos($enlace);
@@ -55,6 +55,7 @@ if (isset($_GET['error'])) {
 </head>
 
 <body>
+    <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
         <h1>Registro de Turno</h1>
         <form action="../acciones/registrar_turno.php" method="post">
@@ -86,7 +87,10 @@ if (isset($_GET['error'])) {
             </div>
         </form>
     </div>
+<div class= footer>
+        <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
-
 </html>
 

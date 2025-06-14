@@ -8,6 +8,50 @@ if (!isset($_SESSION['nombreusuario'])) {
 $tipo_usuario = $_SESSION['tipousuario'];
 include('../funciones/funcionesturnos.php');
 
+$mensaje_toast = '';
+$tipo_toast = '';
+
+if (isset($_GET['success'])) {
+    $codigo_efectivo = $_GET['success'];
+    switch ($codigo_efectivo) {
+        case 'usuario_inactivado':
+            $mensaje_toast = '¡Usuario inactivado correctamente!';
+            $tipo_toast = 'success';
+            break;
+        case 'turno_modificado':
+            $mensaje_toast = '¡Turno modificado correctamente!';
+            $tipo_toast = 'success';
+            break;
+        case 'turno_registrado':
+            $mensaje_toast = '¡Turno registrado correctamente!';
+            $tipo_toast = 'success';
+            break;
+        default:
+            $mensaje_toast = '¡Operacion exitosa!';
+            $tipo_toast = 'success';
+    }
+} elseif (isset($_GET['error'])) {
+    $codigo_error = $_GET['error'];
+    switch ($codigo_error) {
+        case '':
+            $mensaje_toast = '';
+            $tipo_toast = 'danger';
+            break;
+        case '':
+            $mensaje_toast = '';
+            $tipo_toast = 'danger';
+            break;
+        case '':
+            $mensaje_toast = '';
+            $tipo_toast = 'danger';
+            break;    
+        default:
+            $mensaje_toast = 'Ocurrio un error inesperado.';
+            $tipo_toast = 'danger';
+    }
+
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -16,9 +60,11 @@ include('../funciones/funcionesturnos.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Turnos</title>
     <link rel="stylesheet" href="../estilos/estilogestores.css">
+    <link rel="icon" href="../estilos/medicosturnos.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 <body>
+    <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
         <h1>Turnos</h1>
          <?php if ($tipo_usuario == 'Secretario' || $tipo_usuario == 'Administrador'): ?>
@@ -42,15 +88,26 @@ include('../funciones/funcionesturnos.php');
                     $resultadoTurnos = obtenerListaDeTurnos($enlace);
                     if ($resultadoTurnos->num_rows > 0) {
                             while ($filaTurno = $resultadoTurnos->fetch_assoc()) {
+                                $estado_turno = htmlspecialchars($filaTurno['estado'], ENT_QUOTES, 'UTF-8');
                                     echo "<tr>
                                             <td>{$filaTurno['idturno']}</td>
                                             <td>{$filaTurno['nombremedico']}</td>
                                             <td>{$filaTurno['nombrepaciente']}</td>
                                             <td>{$filaTurno['fecha']}</td>
                                             <td>{$filaTurno['lugar']}</td>
-                                            <td>{$filaTurno['observacion']}</td>
-                                            <td>{$filaTurno['estado']}</td>
-                                        </tr>";
+                                            <td>{$filaTurno['observacion']}</td>";
+                                            $clase_badge_estado = '';
+                                            if($estado_turno == 'Asignado'){
+                                            $clase_badge_estado = 'text-bg-success';
+                                            } elseif ($estado_turno == 'Cancelado') {
+                                            $clase_badge_estado = 'text-bg-danger';
+                                            } elseif ($estado_turno == 'Modificado') {
+                                            $clase_badge_estado = 'text-bg-info';
+                                            } else {
+                                            $clase_badge_estado = 'text-bg-secondary';
+                                            }
+                                    echo   '<td><span class="badge '. $clase_badge_estado . '">' . $estado_turno . '</span></td>';
+                                    echo   "</tr>";
                                     }
                                 } else {
                                     echo "<tr><td colspan='7'>No hay turnos registrados.</td></tr>";
@@ -59,11 +116,11 @@ include('../funciones/funcionesturnos.php');
                                 echo "<tr><td colspan='7'>Error: " . $ex->getMessage() . "</td></tr>";
                             }
                             ?>
-                            <form action= "../main/registro-turnos.php" method="post">
-                            <button type="submit">Registrar Nuevo Turno</button>
-                            </form>
                         </tbody>
                     </table>
+                    <form action= "../main/registro-turnos.php" method="post">
+                                <button type="submit">Registrar Nuevo Turno</button>
+                    </form> <!-- 9/6 Movido de Lugar para que se muestre correctamente. -->
         </div>
         <div class="agenda-turnos">
             <h3>Disponibilidad de Médicos (Agenda)</h3>
@@ -120,9 +177,15 @@ include('../funciones/funcionesturnos.php');
                                     echo "<tr>
                                             <td>{$filaNotificacion['tipo']}</td>
                                             <td>{$filaNotificacion['mensaje']}</td>
-                                            <td>{$filaNotificacion['fecha_creacion']}</td>
-                                            <td>{$estado}</td>
-                                            <td>";
+                                            <td>{$filaNotificacion['fecha_creacion']}</td>";
+                                            $clase_badge_estado = '';
+                                            if($estado == 'Visto'){
+                                            $clase_badge_estado = 'text-bg-success';
+                                            } elseif ($estado == 'No Visto') {
+                                            $clase_badge_estado = 'text-bg-danger';
+                                            }
+                                    echo   '<td><span class="badge '. $clase_badge_estado . '">' . $estado . '</span>';
+                                    echo    "<td>";
                                     if ($filaNotificacion['visto'] == 0) {
                                         echo "<form method='post' action=''>
                                                 <input type='hidden' name='idnotificacion_vista' value='{$filaNotificacion['idnotificacion']}'>
@@ -189,15 +252,26 @@ include('../funciones/funcionesturnos.php');
                             $resultadoMedico = obtenerListaDeTurnosIndividual($enlace);
                             if ($resultadoMedico->num_rows > 0) {
                                 while ($filaMedico = $resultadoMedico->fetch_assoc()) {
+                                    $estado_turno = htmlspecialchars($filaMedico['estado'], ENT_QUOTES, 'UTF-8');
                                     echo "<tr>
                                             <td>{$filaMedico['idturno']}</td>
                                             <td>{$filaMedico['nombremedico']}</td>
                                             <td>{$filaMedico['nombrepaciente']}</td>
                                             <td>{$filaMedico['fecha']}</td>
                                             <td>{$filaMedico['lugar']}</td>
-                                            <td>{$filaMedico['observacion']}</td>
-                                            <td>{$filaMedico['estado']}</td>
-                                            <td>
+                                            <td>{$filaMedico['observacion']}</td>";
+                                            $clase_badge_estado = '';
+                                            if($estado_turno == 'Asignado'){
+                                            $clase_badge_estado = 'text-bg-success';
+                                            } elseif ($estado_turno == 'Cancelado') {
+                                            $clase_badge_estado = 'text-bg-danger';
+                                            } elseif ($estado_turno == 'Modificado') {
+                                            $clase_badge_estado = 'text-bg-info';
+                                            } else {
+                                            $clase_badge_estado = 'text-bg-secondary';
+                                            }
+                                    echo   '<td><span class="badge '. $clase_badge_estado . '">' . $estado_turno . '</span></td>';
+                                    echo   "<td>
                                                 <form method='post' action=''>
                                                     <input type='hidden' name='idturno_cancelar' value='{$filaMedico['idturno']}'>
                                                     <button type='submit' class='boton-modificar' name='cancelar_turno' value='Cancelar' onclick='return confirmarCancelacion({$filaMedico['idturno']})'>
@@ -231,7 +305,25 @@ include('../funciones/funcionesturnos.php');
         <?php else: ?>
             <p>Acceso no autorizado.</p>
         <?php endif; ?>
-        <?php generarBotonRetorno(); //Para el boton de Retorno que aplique a Medicos, Secretarios y Administrador.?> 
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // PHP pasa el mensaje a JavaScript
+            const mensajeToast = "<?php echo addslashes($mensaje_toast); ?>";
+               
+            if (mensajeToast) {
+                const toastLiveExample = document.getElementById('liveToast');
+                const toast = new bootstrap.Toast(toastLiveExample);
+                toast.show();
+
+                // Limpiar la URL después de mostrar el mensaje
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+    </script>
+    <div class= footer>
+        <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>

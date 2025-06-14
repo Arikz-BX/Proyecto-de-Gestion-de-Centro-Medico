@@ -4,20 +4,6 @@ if (!isset($_SESSION['nombreusuario'])) {
     header("Location: ../main/inicio-sesion.php");
     exit();
 }
-if (isset($_POST['logout'])) {
-    $_SESSION = array();
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params["path"], $params["domain"],
-            $params["secure"], $params["httponly"]
-        );
-    }
-    session_destroy();
-    // Redirige al usuario a la página de inicio de sesión
-    header("Location: inicio-sesion.php");
-    exit();
-}
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +16,7 @@ if (isset($_POST['logout'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 <body>
+<?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
         <h1>Panel de Medico</h1>
         <div class="dashboard-icons">
@@ -41,11 +28,9 @@ if (isset($_POST['logout'])) {
             </a>
         </div>
     </div>
-    <form method="post" style="text-align: right;">
-        <button type="submit" method="post" name="logout" id="logout">Cerrar Sesion</button>
-    </form>
     <div class= footer>
-        <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico<h2>        
-    </div>  
+        <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2>        
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>

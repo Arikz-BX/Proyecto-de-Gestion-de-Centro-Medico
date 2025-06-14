@@ -101,16 +101,4 @@ function marcarNotificacionComoVista($enlace, $idnotificacion)
     $stmt->execute();
     $stmt->close();
 }
-function generarBotonRetorno() {
-    if (isset($_SESSION['tipousuario'])) { // Primero, verifica si la sesión está iniciada
-        if ($_SESSION['tipousuario'] == 'Administrador') {
-            echo '<button onclick="window.location.href=\'indexadmin.php\'">Regresar al Inicio</button>';
-        } elseif ($_SESSION['tipousuario'] == 'Secretario') {
-            echo '<button onclick="window.location.href=\'indexsecretario.php\'">Regresar al Inicio</button>';
-        } elseif ($_SESSION['tipousuario'] == 'Medico') {
-            echo '<button onclick="window.location.href=\'index.php\'">Regresar al Inicio</button>';
-        }
-    }
-    //Si no hay sesión iniciada, no se muestra nada
-}
 ?>

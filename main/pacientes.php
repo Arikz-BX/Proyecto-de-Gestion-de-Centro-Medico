@@ -4,16 +4,7 @@ if (!isset($_SESSION['nombreusuario'])) {
     header("Location: ../main/inicio-sesion.php"); 
     exit();
 }
-function generarBotonRetorno() {
-    if (isset($_SESSION['tipousuario'])) { // Primero, verifica si la sesión está iniciada
-        if ($_SESSION['tipousuario'] == 'Administrador') {
-            echo '<button onclick="window.location.href=\'indexadmin.php\'">Volver al Inicio</button>';
-        } elseif ($_SESSION['tipousuario'] == 'Secretario') {
-            echo '<button onclick="window.location.href=\'indexsecretario.php\'">Volver al Inicio</button>';
-        }
-    }
-}
-include('../acciones/registrar_pacientes.php')
+include('../acciones/registrar_pacientes.php');
 ?>
 
 <!DOCTYPE html>
@@ -26,6 +17,7 @@ include('../acciones/registrar_pacientes.php')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 <body>
+    <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
         <h1>Registro de Nuevo Paciente</h1>
         <form action="../acciones/registrar_pacientes.php" method="post">
@@ -42,7 +34,10 @@ include('../acciones/registrar_pacientes.php')
             </div>
     </form>
             <a href="listado_pacientes.php" class="button">Listado de Pacientes</a>
-            <?php generarBotonRetorno(); //Para el boton de Retorno que aplique a Secretarios y Administrador.?>
 </div>
+<div class= footer>
+        <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>

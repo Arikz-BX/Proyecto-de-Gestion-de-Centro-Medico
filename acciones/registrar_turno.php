@@ -32,17 +32,23 @@ if (isset($_POST['idmedico'], $_POST['idpaciente'], $_POST['fecha'], $_POST['lug
         $nombre_paciente = $fila_paciente['nombrepaciente'];
 
         if ($lugar != $consultorio_medico) {
-            echo "<div class='error'>Error: El turno solo se puede asignar en la dirección del médico: " . $consultorio_medico . "</div>";
+            echo "<script>
+            alert('Error: El turno solo se puede asignar en la dirección del médico:  . $consultorio_medico . ')
+            </script>"; 
         }
         try {
             $fecha_turno = new DateTime($fecha_str, new DateTimeZone('America/Argentina/Buenos_Aires'));
             $fecha_actual = new DateTime(null, new DateTimeZone('America/Argentina/Buenos_Aires'));
         } catch (Exception $e) {
-            echo "<div class='error'>Error: Formato de fecha incorrecto.</div>";
+            echo "<script>
+            alert('Error: Formato de fecha incorrecto.')
+            </script>";
         }
 				// Validar que la fecha del turno no sea en el pasado
         if ($fecha_turno < $fecha_actual) {
-            echo "Error: La fecha del turno debe ser de hoy en adelante.";
+            echo "<script>
+            alert('Error: La fecha del turno debe ser de hoy en adelante.')
+            </script>";
         }
 
         // Validar si el turno está dentro del horario de agenda del médico
@@ -80,8 +86,7 @@ if (isset($_POST['idmedico'], $_POST['idpaciente'], $_POST['fecha'], $_POST['lug
             $fecha_insertar = $fecha_turno->format('Y-m-d H:i:s');
             $stmt->bind_param("iissssss", $idmedico, $idpaciente, $nombre_paciente, $nombre_medico, $fecha_insertar, $lugar, $observacion, $estado);
             if ($stmt->execute()) {
-                echo "Turno registrado exitosamente.";
-                header("Location: ../main/turnos.php");
+                header("Location: ../main/turnos.php?success=turno_registrado");
                 exit();
             } else {
                 header ('Location: ../../main/registro-turnos.php?error=fallo_de_registro'); //Cambiada la logica de como mostrar los Errores.
