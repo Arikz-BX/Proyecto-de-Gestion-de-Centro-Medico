@@ -10,43 +10,52 @@ body{
     justify-content: flex-start;
     box-sizing: border-box;
 }
-.tema-medicos {
-    var--();
-}
-.tema-secretarios {
-
-}
 header {
     width: 100%;
     box-sizing: border-box;
     border: 1px solid #4b4b4b;
 }
-.container{
+/*Apartado del Container*/
+div.container{
     border-radius: 12px;
-    box-shadow: 0 8px 20px #00000026;
-    padding: 30px;
+    box-shadow: 0 8px 20px #0000008e;
+    background-color: #b4668d60;
+    padding: 20px 30px 20px 30px;
     margin-bottom: 50px;
-    width: 95%;
+    width: 70%;
     max-width: 1200px;
     box-sizing: border-box;
 }
-.formulario{
-    width: 400px;
-    background: #c0c0c0;
+div.container h1 {
+    text-align: center;
+    margin-top: auto;
+    padding: 20px 0 20px 0;
+    color: #000000;
+    font-weight: 600;
+    font-family: sans-serif;
+    border: 1px solid #212122;
+    font-size: 1.8em;
+    width: 100%;
+    box-sizing: border-box;
+}
+/*Apartado del Formulario (Agregar||Modificar)*/
+.formulario {
+    width: 45%;
+    background-color: #c0c0c0;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 8px #00000033;
     box-sizing:border-box;
     margin: 0 auto;
 }
-.formulario h1{
+.formulario h2 {
     text-align: center;
     padding: 0 0 20px 0;
     font-family: sans-serif;
     border-bottom: 1px solid #212122;
     font-size: 1.8em;
 }
-.formulario label{
+.formulario label {
     display: block;
     margin-bottom: 5px;
     box-sizing: border-box;
@@ -61,36 +70,58 @@ header {
     width: 100%;
     box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
 }
-.gestion-turnos {
+.formulario textarea {
+    min-height: fit-content;
+    max-height: 9.8rem;
+}
+/*.gestion-turnos {
     background-color: #65adff;
     padding: 20px;
     border-radius: 10px;
+}*/
+/*Apartado de Listas*/
+.lista-medicos, div.container h1.medico {
+    background: #ec7e8dd2;
 }
-.lista-usuarios, .lista-medicos, .lista-pacientes, .gestion-turnos, .lista-turnos-medico {
+.lista-usuarios, div.container h1.usuario {
+    background: #bdb2b2af;
+}
+.lista-pacientes, div.container h1.paciente {
+    background: #99acc9;
+}
+.lista-usuarios, .lista-medicos, .lista-pacientes { /*,.gestion-turnos, .lista-turnos-medico*/ 
     padding: 25px;
     border-radius: 12px;
     margin-bottom: 25px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     overflow-x: auto;
 }
-
+.lista-usuarios form, .lista-pacientes form, .lista-medicos form {
+    display: inline-block;
+}
+div.container a.button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+}
 /* "turnos-notificaciones"> "agenda-turnos"> "gestion-turnos">*/
 .lista-turnos-medico {
     background-color: #bd4cff;
     padding: 15px;
     border-radius: 10px;
 }
-.dashboard-icon img {
-  display: block;
-  width: 50px;
-  height: 50px;
-}
+/*Apartado de Tablas*/
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     border-radius: 8px;
     overflow: hidden;
+    min-width: 1000px;
 }
 table thead{
     background-color: #584cff;
@@ -99,22 +130,73 @@ table th, table td{
     padding: 12px 15px; /* Relleno dentro de las celdas */
     text-align: left; /* Alineación del texto a la izquierda */
     border-bottom: 1px solid #e0e0e0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 300px;
+    overflow: hidden;
 }
 table th{
     color: #212122;
     font-weight: 600; 
     font-size: 0.95em;
     text-transform: uppercase; /* Mayúsculas para las cabeceras */
+    text-align: center;
 }
 .container table{
     background: #c0c0c0;
 }
-
+.truncate-text {
+    max-width: 200px; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
+}
+/*Apartado de Botones*/
+button.boton-estado-abm, button.boton-modificar, button.boton-estado-reactivar, button.boton-registro-datos, a.button {
+    padding: 8px 12px;
+    display: inline;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+button.boton-registro-datos {
+    background-color: #1b02fd; /* Azul para Registros */
+    color: #808080;
+}
+button.boton-registro-datos:hover {
+    background-color: #0a1bb9;
+}
+button.boton-modificar {
+    background-color: #ffc107; /* Amarillo de Bootstrap 'warning' */
+    color: #333;
+}
+button.boton-modificar:hover {
+    background-color: #e0a800;
+}
+button.boton-estado-abm {
+    background-color: #dc3545;
+    color: white;
+}
+button.boton-estado-abm:hover {
+    background-color: #c82333;
+}
+button.boton-estado-reactivar {
+    background-color: #28a745; 
+    color: white;
+}
+button.boton-estado-reactivar:hover {
+    background-color: #218838;
+}
+/*Footer*/
 .footer {
     width: 100%;
     padding: 15px 20px;
     margin-top: auto; /* 10/6 Corregido Y Añadido Auto al Margin*/
-    background-color: #c0c0c0;
+    background-color: #fffcfc;
     text-shadow: -1px 0 black, 1px 0 black, 0 -1px black, 0  1px black; /* Este se usa para el Contorno */
     box-sizing: border-box; /* 9/6 Corregido el Absolute con un Box-sizing para que se muestre correctamente dentro del Body.*/
 }

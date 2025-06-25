@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['idusuario']) && is_nume
         exit();
     }
     mysqli_commit($enlace);
-        header("Location: ../../main/usuarios.php?success=usuario_desactivado");
+        header("Location: ../../main/usuarios.php?success=usuario_inactivado");
         exit();
 
 

@@ -73,14 +73,22 @@ if (array_key_exists($pagina_actual, $mapeo_de_paginas)) {
                 <?php if ($_SESSION['tipousuario'] == 'Medico' || $_SESSION['tipousuario'] == 'Administrador') { ?>
                     <li><h6 class="dropdown-header">Navegación Médico:</h6></li>
                     <li><a class="dropdown-item" href="index.php">Pagina Principal (Médicos)</a></li>
-                    <li style="display: flex; aling-items: center;">
+                    <!--<li style="display: flex; aling-items: center;">
                         <img src="../estilos/agenda.ico" alt="Icono de agenda" style="width: 30px; height: 30px; margin-right: 5px; margin-left: 5px;">
                         <a class="dropdown-item" href="agenda.php">Registro de Agenda</a>
-                    </li>
-                    <li style="display: flex; align-items: center;">
+                    </li>-->
+                    <!--<li style="display: flex; align-items: center;">
                         <img src="../estilos/medicosturnos.ico" alt="Icono de turnos" style="width: 30px; height: 30px; margin-right: 5px; margin-left: 5px;">
                         <a class="dropdown-item" href="turnos.php">Gestión de Turnos</a>
                         <img src="../estilos/medicos.ico" alt="Icono de medicos" style="width: 30px; height: 30px; margin-right: 5px; margin-left: 5px;">
+                    </li>-->
+                    <li style="display: flex; align-items: center;">
+                        <img src="../estilos/medicos.ico" alt="Icono de medicos" style="width: 30px; height: 30px; margin-right: 5px; margin-left: 5px;">
+                        <a class="dropdown-item" href="medicos.php">Gestión de Médicos</a>
+                    </li>
+                    <li style="display: flex; align-items: center;">
+                        <img src="../estilos/medicolista.ico" alt="Icono de pacientes" style="width: 30px; height: 30px; margin-right: 5px; margin-left: 5px;">
+                        <a class="dropdown-item" href="listado_pacientes.php">Gestión de Pacientes</a>
                     </li>
                 <?php } ?>
     
@@ -100,11 +108,11 @@ if (array_key_exists($pagina_actual, $mapeo_de_paginas)) {
                         <img src="../estilos/medicolista.ico" alt="Icono de pacientes" style="width: 30px; height: 30px; margin-right: 5px; margin-left: 5px;">
                         <a class="dropdown-item" href="listado_pacientes.php">Gestión de Pacientes</a>
                     </li>
-                    <li style="display: flex; align-items: center;">
+                    <!--<li style="display: flex; align-items: center;">
                         <img src="../estilos/medicosturnos.ico" alt="Icono de turnos" style="width: 30px; height: 30px; margin-right: 5px; margin-left: 5px;">
                         <a class="dropdown-item" href="turnos.php">Gestión de Turnos</a>
                         <img src="../estilos/secretarios.ico" alt="Icono de medicos" style="width: 30px; height: 30px; margin-right: 5px; margin-left: 5px;">
-                    </li>
+                    </li>-->
                 <?php } ?>
     
                 <?php if ($_SESSION['tipousuario'] == 'Administrador') { ?>

@@ -19,21 +19,23 @@ include('../acciones/registrar_pacientes.php');
 <body>
     <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
-        <h1>Registro de Nuevo Paciente</h1>
+        <h1 class="paciente">Registro de Nuevo Paciente</h1>
         <form action="../acciones/registrar_pacientes.php" method="post">
             <div class="formulario">
-                <p>Nombre Paciente: <input type="text" required placeholder="Ingrese el Nombre" name="nombrepaciente"></p>
-                <p>DNI: <input type="text" id="dni" minlength="8" required placeholder="Ingrese el Documento" name="dni"></p>
-                <p>Obra Social: <input type="text" id="obrasocial" required placeholder="Ingrese la Obra Social" minlength="6" name="obrasocial"></p>
-                <p>Direccion: <input type="text" id="direccion" required placeholder="Ingrese Direccion" minlength="9" name="direccion"></p>
-                <p>Telefono: <input type="text" id="telefono" required placeholder="Ingrese Contacto Telefonico" minlength="9" name="telefono"></p>
-                <p>Correo Electronico: <input type="text" id="correoelectronico" placeholder="Ingrese Correo de Contacto" name="correoelectronico"></p>
-                <label for="notas">Notas Adicionales:</label>
-                <textarea id="notas" name="notas"></textarea>      
+                <p>Nombre Paciente: <input type="text" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$" required placeholder="Ingrese el Nombre" name="nombrepaciente" class="form-control"></p>
+                <p>DNI: <input type="text" id="dni" minlength="8" pattern="^\d{8}$" required placeholder="Ingrese el Documento" name="dni" class="form-control"></p>
+                <p>Obra Social: <input type="text" id="obrasocial" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$" required placeholder="Ingrese la Obra Social" minlength="6" name="obrasocial" class="form-control"></p>
+                <p>Direccion: <input type="text" id="direccion" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,#-]*$" required placeholder="Ingrese Direccion" minlength="9" name="direccion" class="form-control"></p>
+                <p>Telefono: <input type="text" id="telefono" pattern="^\+?\d{9,15}$" required placeholder="Ingrese Contacto Telefonico" minlength="9" maxlength="15" name="telefono" class="form-control"></p>
+                <p>Correo Electronico: <input type="text" id="correoelectronico" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" placeholder="Ingrese Correo de Contacto" name="correoelectronico" class="form-control"></p>
+                <label for="notas" class="form-control">Notas Adicionales:</label>
+                <textarea id="notas" name="notas" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,#-]*$" class="form-control"></textarea>      
                 <button type="submit" name="guardar_paciente">Guardar Paciente</button>
             </div>
     </form>
-            <a href="listado_pacientes.php" class="button">Listado de Pacientes</a>
+            <a href="listado_pacientes.php">
+                <button type="submit" class="button">Listado de Pacientes</button>
+            </a>
 </div>
 <div class= footer>
         <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 

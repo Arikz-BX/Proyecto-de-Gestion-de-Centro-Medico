@@ -42,11 +42,21 @@ body{
     padding: 20px;
     text-align: center;
 }
-
-.formulario-botones {
+.formulario input[type="submit"] {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+}
+/*button.boton-redireccion {
     box-sizing: border-box;
     position: relative;
-}
+    background: #008064;
+}*/
+
 
 form .username{
     position: relative;
@@ -95,7 +105,6 @@ form .nombrepersonal{
     background: none;
     outline: none;
 }
-
 .footer {
     position: absolute;
     margin-top: auto;

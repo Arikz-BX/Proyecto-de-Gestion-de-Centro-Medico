@@ -5,7 +5,7 @@ include('../../conexion/conexionbasededatos.php');
     $clave=$_POST['clave'];
 
 
-    $consulta = "SELECT idusuario, nombreusuario, usuarioclave, tipousuario, estado FROM usuarios WHERE nombreusuario = ? AND estado ='Activo'"; //Abre consulta directo en el SQL
+    $consulta = "SELECT idusuario, nombreusuario, usuarioclave, tipousuario, estado FROM usuarios WHERE nombreusuario = ?"; //Abre consulta directo en el SQL
     $stmt = $enlace->prepare($consulta);
 
     if($stmt) {

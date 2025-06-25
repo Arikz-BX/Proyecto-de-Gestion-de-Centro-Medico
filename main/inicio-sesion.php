@@ -55,11 +55,13 @@ if (isset($_GET['error'])) {
         <div class="password">
             <p>Clave <input type="password" minlength="8" required placeholder="Ingrese su Clave" name="clave"></p>
         </div>
-        <input type="submit" value="Ingresar"> 
+        <input type="submit" class="button" value="Ingresar">
+        </div> 
     </div>
 </form>
     <div class= footer>
         <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
     </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>

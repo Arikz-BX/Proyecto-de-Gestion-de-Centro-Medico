@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
                 WHERE idpaciente = ?";
         $stmt = $enlace->prepare($sql);
         if ($stmt) {
-            $stmt->bind_param("ssssssssi", $nuevo_nombre, $idpaciente);
+            $stmt->bind_param("ssssssssi", $nuevo_nombre, $nuevo_dni, $nueva_obrasocial, $nueva_direccion, $nuevo_telefono, $nuevo_correo, $nuevo_estado, $nuevas_notas, $idpaciente);
             if ($stmt->execute()) {
                 header("Location: ../main/pacientes.php?mensaje=paciente_actualizado");
                 exit;
@@ -102,7 +102,7 @@ $enlace->close();
 <body>
     <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
-        <h1>Modificar Paciente</h1>
+        <h1 class="paciente">Modificar Paciente</h1>
 
         <?php if ($error): ?>
             <p class="error"><?= htmlspecialchars($error) ?></p>
@@ -114,31 +114,31 @@ $enlace->close();
                 <div class="formulario">
                     <label for="nombrepaciente">Nombre del Paciente:</label>
                     <input type="text" id="nombrepaciente" name="nombrepaciente" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$"
-                            value="<?= htmlspecialchars($nombrepaciente) ?>" required>
+                            value="<?= htmlspecialchars($nombrepaciente) ?>" maxlength="255" class="form-control" required>
                     <label for="dni">DNI:</label>
                     <input type="text" id="dni" name="dni"
-                            value="<?= htmlspecialchars($dni) ?>" required>
+                            value="<?= htmlspecialchars($dni) ?>" maxlength="10" class="form-control" required>
                     <label for="obrasocial">Obra Social:</label>
                     <input type="text" id="obrasocial" name="obrasocial"
-                            value="<?= htmlspecialchars($obrasocial) ?>" required>
+                            value="<?= htmlspecialchars($obrasocial) ?>" maxlength="255" class="form-control" required>
                     <label for="direccion">Direccion:</label>
-                    <input type="text" id="direccion" name="direccion
-                            value="<?= htmlspecialchars($direccion) ?>" required>
+                    <input type="text" id="direccion" name="direccion"
+                            value="<?= htmlspecialchars($direccion) ?>" maxlength="255" class="form-control" required>
                     <label for="telefono">Telefono:</label>
                     <input type="text" id="telefono" name="telefono"
-                            value="<?= htmlspecialchars($telefono) ?>" required>
+                            value="<?= htmlspecialchars($telefono) ?>" maxlength="10" class="form-control" required>
                     <label for="correoelectronico">Correo:</label>
                     <input type="text" id="correoelectronico" name="correoelectronico"
-                            value="<?= htmlspecialchars($correo) ?>" required>
+                            value="<?= htmlspecialchars($correo) ?>" maxlength="255" class="form-control" required>
                     <label for="estado">Estado:</label>
-                    <select type="option" id="estado" name="estado" required>
+                    <select id="estado" name="estado" class="form-control" required>
                     <option value="En Espera" <?php if ($estado === 'En Espera') echo 'selected'; ?>>En Espera</option>
                     <option value="En Tratamiento" <?php if ($estado === 'En Tratamiento') echo 'selected'; ?>>En Tratamiento</option>
                     <option value="Dado de Alta" <?php if ($estado === 'Dado de Alta') echo 'selected'; ?>>Dado de Alta</option>
                     </select>
                     <label for="notas">Notas:</label>
-                    <input type="text" id="notas" name="notas"
-                            value="<?= htmlspecialchars($notas) ?>" required>
+                    <textarea id="notas" name="notas"
+                            value="<?= htmlspecialchars($notas) ?>" maxlength="650" rows="3" class="form-control" required></textarea>
                 </div>
                 <div class="formulario">
                     <button type="submit" name="guardar">Guardar Cambios</button>

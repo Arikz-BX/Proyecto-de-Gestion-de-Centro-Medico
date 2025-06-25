@@ -1,40 +1,32 @@
 <?php
 session_start();
 include('../../conexion/conexionbasededatos.php');
-$idusuario_a_desactivar       = null;
+$idusuario_a_reactivar       = null;
 
 if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['idusuario']) && is_numeric($_POST['idusuario'])) {
-    $idusuario_a_desactivar = (int) $_POST['idusuario'];
+    $idusuario_a_reactivar = (int) $_POST['idusuario'];
 
     mysqli_begin_transaction($enlace);
     try{
-        $sql_eliminar_agenda = "DELETE FROM agenda WHERE idmedico IN (SELECT idmedico FROM medicos WHERE idusuario = ?)";
-        $stmt_eliminar_agenda = $enlace->prepare($sql_eliminar_agenda);
-        if (!$stmt_eliminar_agenda) {
-            throw new Exception ("Error al preparar la consulta de agenda" . $enlace->error);
-        }
-        $stmt_eliminar_agenda->bind_param("i", $idusuario_a_desactivar);
-        $stmt_eliminar_agenda->execute();
-        $stmt_eliminar_agenda->close();
 
-        $sql_dar_baja_medicos = "UPDATE medicos SET estado = 'Inactivo' WHERE idusuario = ?";
-        $stmt_dar_baja_medicos = $enlace->prepare($sql_dar_baja_medicos);
+        $sql_dar_alta_medicos = "UPDATE medicos SET estado = 'Activo' WHERE idusuario = ?";
+        $stmt_dar_alta_medicos = $enlace->prepare($sql_dar_alta_medicos);
 
-        if ($stmt_dar_baja_medicos) {
-        $stmt_dar_baja_medicos->bind_param("i", $idusuario_a_desactivar);
-        $stmt_dar_baja_medicos->execute();
-        $stmt_dar_baja_medicos->close();
+        if ($stmt_dar_alta_medicos) {
+        $stmt_dar_alta_medicos->bind_param("i", $idusuario_a_reactivar);
+        $stmt_dar_alta_medicos->execute();
+        $stmt_dar_alta_medicos->close();
 
-        $sql_dar_baja_usuario = "UPDATE usuarios SET estado = 'Inactivo' WHERE idusuario = ?";
-        $stmt_dar_baja_usuario = $enlace->prepare($sql_dar_baja_usuario);
+        $sql_dar_alta_usuario = "UPDATE usuarios SET estado = 'Activo' WHERE idusuario = ?";
+        $stmt_dar_alta_usuario = $enlace->prepare($sql_dar_alta_usuario);
 
-        if ($stmt_dar_baja_usuario) {
-            $stmt_dar_baja_usuario->bind_param("i", $idusuario_a_desactivar);
+        if ($stmt_dar_alta_usuario) {
+            $stmt_dar_alta_usuario->bind_param("i", $idusuario_a_reactivar);
 
-            if ($stmt_dar_baja_usuario->execute()) {
-                $stmt_dar_baja_usuario->close();
+            if ($stmt_dar_alta_usuario->execute()) {
+                $stmt_dar_alta_usuario->close();
             } else {
-                header("Location: ../../main/usuarios.php?error=fallo_usuario_inactivado");
+                header("Location: ../../main/usuarios.php?error=fallo_usuario_reactivado");
                 exit();
             }
         } else {
@@ -46,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['idusuario']) && is_nume
         exit();
     }
     mysqli_commit($enlace);
-        header("Location: ../../main/usuarios.php?success=usuario_desactivado");
+        header("Location: ../../main/usuarios.php?success=usuario_reactivado");
         exit();
 
 

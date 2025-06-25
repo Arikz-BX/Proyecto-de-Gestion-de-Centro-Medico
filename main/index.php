@@ -4,6 +4,37 @@ if (!isset($_SESSION['nombreusuario'])) {
     header("Location: ../main/inicio-sesion.php");
     exit();
 }
+$mensaje_toast = '';
+$tipo_toast = '';
+
+if (isset($_GET['success'])) {
+    $codigo_efectivo = $_GET['success'];
+    switch ($codigo_efectivo) {
+        case 'usuario_modificado':
+            $mensaje_toast = '¡Usuario modificado correctamente!';
+            $tipo_toast = 'success';
+            break;
+        default:
+            $mensaje_toast = '¡Operacion exitosa!';
+            $tipo_toast = 'success';
+    }
+} elseif (isset($_GET['error'])) {
+    $codigo_error = $_GET['error'];
+    switch ($codigo_error) {
+        case 'usuario_modificar_denegado':
+            $mensaje_toast = 'No puedes modificar otros usuarios.';
+            $tipo_toast = 'danger';
+            break;
+        case 'id_usuario_invalido':
+            $mensaje_toast = 'Error al cargar el ID.';
+            $tipo_toast = 'danger';
+            break;    
+        default:
+            $mensaje_toast = 'Ocurrio un error inesperado.';
+            $tipo_toast = 'danger';
+    }
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -20,14 +51,32 @@ if (!isset($_SESSION['nombreusuario'])) {
     <div class="container">
         <h1>Panel de Medico</h1>
         <div class="dashboard-icons">
-            <a href="agenda.php" class="dashboard-icon">
+            <!-- <a href="agenda.php" class="dashboard-icon">
                 <img src="../estilos/agenda.ico" alt="Médicos"> <p>Agenda</p>
+            </a> -->
+            <a href="modificar-usuario.php" class="dashboard-icon">
+                   <img src="../estilos/usuarioscheck.ico" alt="Perfil"> <p>Mi Perfil</p>
             </a>
-            <a href="turnos.php" class="dashboard-icon">
-                <img src="../estilos/medicosturnos.ico" alt="Turnos"> <p>Turnos</p>
+            <a href="listado_pacientes.php" class="dashboard-icon">
+                   <img src="../estilos/medicolista.ico" alt="Pacientes"> <p>Pacientes</p>
             </a>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // PHP pasa el mensaje a JavaScript
+            const mensajeToast = "<?php echo addslashes($mensaje_toast); ?>";
+               
+            if (mensajeToast) {
+                const toastLiveExample = document.getElementById('liveToast');
+                const toast = new bootstrap.Toast(toastLiveExample);
+                toast.show();
+
+                // Limpiar la URL después de mostrar el mensaje
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+    </script> 
     <div class= footer>
         <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2>        
     </div>

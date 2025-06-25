@@ -64,6 +64,7 @@ if (isset($_GET['success'])) {
 <body>
     <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
+        <h1 class="medico">Gestión de Medicos</h1>
         <div class="lista-medicos">
             <h2>Listado de Medicos</h2>
             <table>
@@ -82,7 +83,6 @@ if (isset($_GET['success'])) {
                     <th>ID Usuario</th>
                     <th>Acciones</th>
                 </tr>
-                </div> 
             </thead>
             <tbody>
                 <?php
@@ -96,40 +96,51 @@ if (isset($_GET['success'])) {
                     require_once '../conexion/conexionbasededatos.php';
                     $resultado = listMedicos($enlace);
                     if ($resultado->num_rows > 0) {
-                        while ($row = $resultado->fetch_assoc()) {
-                        $estado = htmlspecialchars($row['estado'], ENT_QUOTES, 'UTF-8');
+                        while ($fila_medico = $resultado->fetch_assoc()) {
+                        $estado_medico = htmlspecialchars($fila_medico['estado'], ENT_QUOTES, 'UTF-8');
                         echo "<tr>
-                        <td>{$row['idmedico']}</td>
-                        <td>{$row['nombrecompleto']}</td>
-                        <td>{$row['dni']}</td>
-                        <td>{$row['matricula']}</td>
-                        <td>{$row['consultorio']}</td>
-                        <td>{$row['direcciondomicilio']}</td>
-                        <td>{$row['telefono']}</td>
-                        <td>{$row['correo']}</td>
-                        <td>{$row['especialidad']}</td>";
+                        <td>{$fila_medico['idmedico']}</td>
+                        <td class='truncate-text' title='" . htmlspecialchars($fila_medico['nombrecompleto']) . "'>" . htmlspecialchars($fila_medico['nombrecompleto']) . "</td>  
+                        <td class='truncate-text' title='" . htmlspecialchars($fila_medico['dni']) . "'>" . htmlspecialchars($fila_medico['dni']) . "</td>
+                        <td class='truncate-text' title='" . htmlspecialchars($fila_medico['matricula']) . "'>" . htmlspecialchars($fila_medico['matricula']) . "</td>
+                        <td>{$fila_medico['consultorio']}</td>
+                        <td class='truncate-text' title='" . htmlspecialchars($fila_medico['direcciondomicilio']) . "'>" . htmlspecialchars($fila_medico['direcciondomicilio']) . "</td>
+                        <td>{$fila_medico['telefono']}</td>
+                        <td class='truncate-text' title='" . htmlspecialchars($fila_medico['correo']) . "'>" . htmlspecialchars($fila_medico['correo']) . "</td>
+                        <td class='truncate-text' title='" . htmlspecialchars($fila_medico['especialidad']) . "'>" . htmlspecialchars($fila_medico['especialidad']) . "</td>";
                         $clase_badge_estado = '';
-                        if($estado == 'Activo'){
+                        if($estado_medico == 'Activo'){
                         $clase_badge_estado = 'text-bg-success';
-                        } elseif ($estado == 'Inactivo') {
+                        } elseif ($estado_medico == 'Inactivo') {
                         $clase_badge_estado = 'text-bg-danger';
-                        } elseif ($estado == 'Licencia') {
+                        } elseif ($estado_medico == 'Licencia') {
                         $clase_badge_estado = 'text-bg-info';
                         }
-                        echo   '<td><span class="badge '. $clase_badge_estado . '">' . $estado . '</span>';
+                        echo   '<td><span class="badge '. $clase_badge_estado . '">' . $estado_medico . '</span>';
                         /*echo    "<td>";<td>{$row['estado']}</td>*/
-                        echo "<td>{$row['idusuario']}</td>
+                        echo "<td>{$fila_medico['idusuario']}</td>
                         <td>
                         <form action='modificar-medico.php' method='post'>
-                            <input type='hidden' name='idmedico' value='{$row['idmedico']}'>
+                            <input type='hidden' name='idmedico' value='{$fila_medico['idmedico']}'>
                             <button type='submit' class='boton-modificar'>Modificar</button>
-                        </form> 
-                        <form action='../acciones/eliminar_medico.php' method='post' style='display:inline'
+                        </form>"; 
+                        if ($estado_medico == 'Activo') {
+                        echo "<form action='../acciones/eliminar_medico.php' method='post' style='display:inline'
                             onsubmit='return confirm(\"¿Estás seguro de que deseas dar de baja a este Medico?\")'>
-                            <input type='hidden' name='idmedico' value='{$row['idmedico']}'>
-                            <button type='submit'>Dar de Baja</button>
-                        </form>
-                    </td>
+                            <input type='hidden' name='idmedico' value='{$fila_medico['idmedico']}'>
+                            <input type='hidden' name='idusuario' value='{$fila_medico['idusuario']}'>
+                            <button type='submit' class='boton-estado-abm'>Dar de Baja</button>
+                        </form>";
+                        } elseif ($estado_medico== 'Inactivo') {
+                        echo "<form action='../acciones/reactivar_medico.php' method='post' style='display:inline'
+                            onsubmit='return confirm(\"¿Estás seguro de que deseas reactivar a este Medico?\")'>
+                            <input type='hidden' name='idmedico' value='{$fila_medico['idmedico']}'>
+                            <input type='hidden' name='idusuario' value='{$fila_medico['idusuario']}'>
+                            <button type='submit' class='boton-estado-reactivar'>Reactivar</button>
+                        </form>";
+                        }
+                    echo    
+                        "</td>
                     </tr>";
                     }
                 } else {
@@ -142,9 +153,11 @@ if (isset($_GET['success'])) {
             </tbody>
             </table>
         </div>
-        <a href="../main/agregar-medico.php" id="agregar">
-            <button href="../main/agregar-medico.php" id="agregar" type="submit" class="button">Agregar Médico</button>
-        </a>
+        <!-- 
+            <a href="../main/agregar-medico.php" id="agregar">
+                <button href="../main/agregar-medico.php" id="agregar" type="submit" class="button">Agregar Médico</button>
+            </a>
+        -->
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

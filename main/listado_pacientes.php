@@ -81,6 +81,7 @@ if (isset($_GET['success'])) {
 <body>
     <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
+        <h1 class="paciente">Gestión de Pacientes</h1>
         <div class= "lista-pacientes">
             <h2>Listado de Pacientes</h2>
             <table>
@@ -116,13 +117,13 @@ if (isset($_GET['success'])) {
                         
                         echo '<tr class= "' . $clase_fila . '">';
                         echo "<td>" . $idpaciente . "</td>";
-                        echo "<td>" . htmlspecialchars($row['nombrepaciente'], ENT_QUOTES, 'UTF-8') . "</td>";
+                        echo "<td class='truncate-text' title='" . htmlspecialchars($row['nombrepaciente']) . "'>" . htmlspecialchars($row['nombrepaciente']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['dni'], ENT_QUOTES, 'UTF-8') . "</td>";
                         echo "<td>" . htmlspecialchars($row['obrasocial'], ENT_QUOTES, 'UTF-8') . "</td>";
-                        echo "<td>" . htmlspecialchars($row['direccion'], ENT_QUOTES, 'UTF-8') . "</td>";
+                        echo "<td class='truncate-text' title='" . htmlspecialchars($row['direccion']) . "'>" . htmlspecialchars($row['direccion']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['telefono'], ENT_QUOTES, 'UTF-8') . "</td>";
-                        echo "<td>" . htmlspecialchars($row['correoelectronico'], ENT_QUOTES, 'UTF-8') . "</td>";
-                        echo "<td>" . htmlspecialchars($row['notas'], ENT_QUOTES, "UTF-8") . "</td>";
+                        echo "<td class='truncate-text' title='" . htmlspecialchars($row['correoelectronico']) . "'>" . htmlspecialchars($row['correoelectronico']) . "</td>";
+                        echo "<td class='truncate-text' title='" . htmlspecialchars($row['notas']) . "'>" . htmlspecialchars($row['notas']) . "</td>";
                         $clase_badge_estado = '';
                         if($estado_paciente == 'En Tratamiento'){
                             $clase_badge_estado = 'text-bg-success';
@@ -137,11 +138,18 @@ if (isset($_GET['success'])) {
                         echo "<form action='../main/modificar-paciente.php' method='post' style='display:inline;'>";
                             echo "<input type='hidden' name='idpaciente' value='{$idpaciente}'>";
                             echo "<button type='submit' class='boton-modificar'>Modificar</button>";
-                        echo "</form>"; 
-                        echo "<form action='../acciones/pacientes/eliminar_paciente.php' method='post' style='display:inline' onsubmit='return confirm(\"¿Estás seguro de que deseas dar de alta a este paciente?\")'>";
-                            echo "<input type='hidden' name='idpaciente' value='" . $idpaciente. "'>";
-                            echo "<button type='submit' class='boton-eliminar'>Dar el Alta</button>";
                         echo "</form>";
+                        if ($estado_paciente == 'En Espera') {
+                        echo "<form action='../acciones/pacientes/eliminar_paciente.php' method='post' onsubmit='return confirm(\"¿Estás seguro de que deseas dar de alta a este paciente?\")'>";
+                            echo "<input type='hidden' name='idpaciente' value='" . $idpaciente. "'>";
+                            echo "<button type='submit' class='boton-estado-abm'>Dar de Alta</button>";
+                        echo "</form>";
+                        } elseif ($estado_paciente == 'Dado de Alta') {
+                        echo "<form action='../acciones/pacientes/reactivar_paciente.php' method='post' onsubmit='return confirm(\"¿Estás seguro de que deseas dar de alta a este paciente?\")'>";
+                            echo "<input type='hidden' name='idpaciente' value='" . $idpaciente. "'>";
+                            echo "<button type='submit' class='boton-estado-reactivar'>Reactivar</button>";
+                        echo "</form>";
+                        }
                     echo "</td>";
                 echo "</tr>";
                     }
@@ -154,8 +162,8 @@ if (isset($_GET['success'])) {
             ?>       
             </tbody>
             </table>
-            <a href="../main/pacientes.php" class="button">
-                <button type="submit" class="button">Agregar Paciente</button>
+            <a href="pacientes.php">
+                <button type="submit" class="boton-registro-datos">Agregar Paciente</button>
             </a>
         </div>    
     </div>

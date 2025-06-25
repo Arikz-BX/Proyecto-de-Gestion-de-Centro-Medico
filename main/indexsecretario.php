@@ -29,9 +29,9 @@ if (!isset($_SESSION['nombreusuario'])) {
                 <a href="listado_pacientes.php" class="dashboard-icon">
                    <img src="../estilos/medicolista.ico" alt="Pacientes"> <p>Pacientes</p>
                 </a>
-                <a href="turnos.php" class="dashboard-icon">
+                <!--<a href="turnos.php" class="dashboard-icon">
                    <img src="../estilos/medicosturnos.ico" alt="Turnos"> <p>Turnos</p>
-                </a>
+                </a>-->
         </div>
     </div>
     <div class= footer>

@@ -36,10 +36,10 @@ document.addEventListener('DOMContentLoaded', manejarMatricula);
         <h1>Guardar Usuario</h1>
         <form action="../acciones/loginreg/registrar.php" method="post">
             <div class="username">
-            <p>Usuario <input type="text" required placeholder="Ingrese un Usuario" name="usuario"></p>
+            <p>Usuario <input type="text" required placeholder="Ingrese un Usuario" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s]+$" name="usuario"></p>
             </div>
             <div class="password">
-            <p>Clave <input type="password" maxlength="8" required placeholder="Ingrese una Clave" name="clave"></p>
+            <p>Clave <input type="password" maxlength="8" pattern="^\d{8}$" required placeholder="Ingrese una Clave" name="clave"></p>
             </div>
             <div class="nombrepersonal">
             <p>Nombre <input type="text" required placeholder="Ingrese el Nombre" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$" name="nombre"></p>
@@ -50,11 +50,11 @@ document.addEventListener('DOMContentLoaded', manejarMatricula);
                 echo '<input type="radio" name="tipousuario" value="Secretario" id="secretario" required onclick="manejarMatricula()"> Secretario<br>';
                 } ?> 
             <div class="matricula" id="matricula">
-            <p>Matricula: <input type="text" maxlength="12" placeholder="Ingrese la Matricula" name="matricula" id="inputMatricula"></p>
+            <p>Matricula: <input type="text" maxlength="12" placeholder="Ingrese la Matricula" pattern="^\d{12}$" name="matricula" id="inputMatricula"></p>
             </div>
            <input type="submit" value="Registrar" name="registrar">
     </form>
-        <button onclick="window.location.href='../main/usuarios.php'">Ya registre una cuenta.</button>
+        <!-- <button class="boton-redireccion" onclick="window.location.href='../main/usuarios.php'">Ya registre una cuenta.</button> -->
     </div>
 <div class= footer>
         <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 

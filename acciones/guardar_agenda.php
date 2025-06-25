@@ -7,7 +7,7 @@ if (isset($_POST['guardar_agenda'])) {
     if (!isset($_SESSION['idmedico'])) {
         echo "<script>
                 alert('Error: Sesión de médico no encontrada.');
-                window.location = '../inicio-sesion.php';
+                window.location = '../main/inicio-sesion.php';
               </script>";
         exit();
     }

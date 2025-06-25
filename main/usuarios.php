@@ -49,6 +49,10 @@ if (isset($_GET['success'])) {
             $mensaje_toast = 'Error al modificar al usuario.';
             $tipo_toast = 'danger';
             break;
+        case 'usuario_modificar_denegado':
+            $mensaje_toast = 'No puedes modificar este usuario.';
+            $tipo_toast = 'danger';
+            break;
         case 'id_usuario_invalido':
             $mensaje_toast = 'Error al cargar el ID.';
             $tipo_toast = 'danger';
@@ -74,7 +78,7 @@ if (isset($_GET['success'])) {
 <body>
 <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
 <div class="container">
-        <h1>Gestión de Usuarios</h1>
+        <h1 class="usuario">Gestión de Usuarios</h1>
         <div class="lista-usuarios">
             <h2>Lista de Usuarios</h2>
             <?php
@@ -115,21 +119,28 @@ if (isset($_GET['success'])) {
                         echo '<td><span class="badge '. $clase_badge_estado . '">' . $estado_usuario . '</span></td>';
                         echo "<td>"; //Celda de Acciones
                         echo "<form action='modificar-usuario.php' method='post' style='display:inline-block; margin-right: 5px;'>";
-                        echo "<input type='hidden' name='id' value='". $id ."'>";
+                        echo "<input type='hidden' name='idusuario' value='". $id ."'>";
                         // if($fila_usuario['tipousuario'] != 'Administrador'){
                         echo "<button type='submit' class='boton-modificar'>Modificar</button>";
                         echo "</form>"; 
                         //}
-                        if ($fila_usuario["nombreusuario"] != $_SESSION['nombreusuario']) { //Previene que se borre a si mismo el Secretario/Administrador.
-                            if ($estado_usuario == 'Activo'){
-                                echo "<form action='../acciones/usuarios/eliminar_usuario.php'  method='post' style='display:inline' onsubmit='return confirm(\"¿Estás seguro de que deseas dar de baja a este usuario?\")'>";
+                        $autorizar_accion = true;
+                        if ($fila_usuario["idusuario"] == $_SESSION['idusuario']){ //Previene que se borre a si mismo el Secretario/Administrador.
+                            $autorizar_accion = false;
+                        }
+                        if ($_SESSION["tipousuario"] == 'Secretario' && $fila_usuario["tipousuario"] == 'Administrador') {  //Previene que el Secretario borre a su superior (Administrador).
+                            $autorizar_accion = false;
+                        }
+                        if ($autorizar_accion) {
+                            if ($estado_usuario == 'Activo') {
+                                echo "<form action='../acciones/usuarios/eliminar_usuario.php'  method='post' onsubmit='return confirm(\"¿Estás seguro de que deseas dar de baja a este usuario?\")'>";
                                 echo "<input type='hidden' name='idusuario' value='". htmlspecialchars($id) ."'>";
-                                echo "<button type='submit'>Dar de Baja</button>";
+                                echo "<button type='submit' class='boton-estado-abm'>Dar de Baja</button>";
                                 echo "</form>";
                             } elseif ($estado_usuario == 'Inactivo') {
-                                echo "<form action='../acciones/usuarios/reactivar_usuario.php'  method='post' style='display:inline' onsubmit='return confirm(\"¿Estás seguro de que deseas reactivar a este usuario?\")'>";
+                                echo "<form action='../acciones/usuarios/reactivar_usuario.php'  method='post' onsubmit='return confirm(\"¿Estás seguro de que deseas reactivar a este usuario?\")'>";
                                 echo "<input type='hidden' name='idusuario' value='". htmlspecialchars($id) ."'>";
-                                echo "<button type='submit'>Dar de Alta</button>";
+                                echo "<button type='submit' class='boton-estado-reactivar'>Dar de Alta</button>";
                                 echo "</form>";
                             }
                         }
@@ -143,7 +154,9 @@ if (isset($_GET['success'])) {
             }
             ?>
             <?php if ($_SESSION['tipousuario'] == 'Administrador' || $_SESSION['tipousuario'] == 'Secretario') { ?>
-            <a href="registro-sesion.php">Registrar Nuevo Usuario</a>
+            <a href="registro-sesion.php">
+                <button type="submit" class="boton-registro-datos">Registrar Nuevo Usuario</button>
+            </a>
             <?php } else { ?>
             <p>No tienes permiso para modificar esta tabla.</p> 
             <?php } ?>
