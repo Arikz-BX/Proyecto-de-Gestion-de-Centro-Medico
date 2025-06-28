@@ -46,7 +46,15 @@ if (isset($_GET['success'])) {
             $mensaje_toast = 'ID de paciente no válido.';
             $tipo_toast = 'danger';
             break;
-        case 'paciente_en_tratamiento': 
+        case 'fallo_stmt_paciente_reactivado':        
+            $mensaje_toast = 'No se puede dar de alta al paciente. Tiene turnos activos o futuros.';
+            $tipo_toast = 'warning'; 
+            break;
+        case 'no_autorizado':        
+            $mensaje_toast = 'No puedes acceder a los datos del Paciente, Contacta a un Secretario.';
+            $tipo_toast = 'warning'; 
+            break;            
+        case 'paciente_en_tratamiento':    
             $mensaje_toast = 'No se puede dar de alta al paciente. Tiene turnos activos o futuros.';
             $tipo_toast = 'warning'; 
             break;
@@ -64,6 +72,10 @@ if (isset($_GET['success'])) {
             $mensaje_toast = 'El paciente ya ha sido dado de alta (inactivo para turnos).';
             $tipo_toast = 'info';
             break;
+        case 'no_autorizado':        
+            $mensaje_toast = 'No puedes acceder a los datos del Paciente, Contacta a un Secretario.';
+            $tipo_toast = 'info'; 
+            break;    
     }
 }
 
@@ -167,6 +179,16 @@ if (isset($_GET['success'])) {
             </a>
         </div>    
     </div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast align-items-center text-white bg-<?php echo $tipo_toast; ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+                <div class="toast-body">
+                    <?php echo htmlspecialchars($mensaje_toast); ?>
+                </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+        </div>
+    </div>
+</div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // PHP pasa el mensaje a JavaScript

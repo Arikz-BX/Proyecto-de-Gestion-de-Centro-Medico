@@ -31,15 +31,15 @@ if (isset($_GET['success'])) {
 } elseif (isset($_GET['error'])) {
     $codigo_error = $_GET['error'];
     switch ($codigo_error) {
-        case '':
-            $mensaje_toast = 'Error al desactivar al usuario.';
+        case 'error_al_dar_de_baja':
+            $mensaje_toast = 'Error al desactivar al Medico.';
             $tipo_toast = 'danger';
             break;
-        case '':
-            $mensaje_toast = 'Error al modificar al usuario.';
+        case 'fallo_medico_modificado':
+            $mensaje_toast = 'Error al modificar al Medico.';
             $tipo_toast = 'danger';
             break;
-        case '':
+        case 'id_medico_invalido':
             $mensaje_toast = 'Error al cargar el ID.';
             $tipo_toast = 'danger';
             break;    
@@ -125,14 +125,14 @@ if (isset($_GET['success'])) {
                             <button type='submit' class='boton-modificar'>Modificar</button>
                         </form>"; 
                         if ($estado_medico == 'Activo') {
-                        echo "<form action='../acciones/eliminar_medico.php' method='post' style='display:inline'
+                        echo "<form action='../acciones/medicos/eliminar_medico.php' method='post' style='display:inline'
                             onsubmit='return confirm(\"¿Estás seguro de que deseas dar de baja a este Medico?\")'>
                             <input type='hidden' name='idmedico' value='{$fila_medico['idmedico']}'>
                             <input type='hidden' name='idusuario' value='{$fila_medico['idusuario']}'>
                             <button type='submit' class='boton-estado-abm'>Dar de Baja</button>
                         </form>";
                         } elseif ($estado_medico== 'Inactivo') {
-                        echo "<form action='../acciones/reactivar_medico.php' method='post' style='display:inline'
+                        echo "<form action='../acciones/medicos/reactivar_medico.php' method='post' style='display:inline'
                             onsubmit='return confirm(\"¿Estás seguro de que deseas reactivar a este Medico?\")'>
                             <input type='hidden' name='idmedico' value='{$fila_medico['idmedico']}'>
                             <input type='hidden' name='idusuario' value='{$fila_medico['idusuario']}'>
@@ -159,6 +159,16 @@ if (isset($_GET['success'])) {
             </a>
         -->
     </div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast align-items-center text-white bg-<?php echo $tipo_toast; ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+                <div class="toast-body">
+                    <?php echo htmlspecialchars($mensaje_toast); ?>
+                </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+        </div>
+    </div>
+</div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // PHP pasa el mensaje a JavaScript

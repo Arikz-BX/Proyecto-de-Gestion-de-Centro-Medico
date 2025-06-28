@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['idpaciente']) && is_num
             if ($stmt_dar_alta_paciente->execute()) {
                 $stmt_dar_alta_paciente->close();
             } else {
-                header("Location: ../../main/listado_pacientes.php?error=fallo_paciente_reactivado");
+                header("Location: ../../main/listado_pacientes.php?error=fallo_stmt_paciente_reactivado");
                 exit();
             }
         } else {
@@ -25,13 +25,13 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['idpaciente']) && is_num
             exit();
         } 
     mysqli_commit($enlace);
-        header("Location: ../../main/listado_pacientes.php?success=usuario_reactivado");
+        header("Location: ../../main/listado_pacientes.php?success=paciente_reactivado");
         exit();
 
 
     } catch (Exception $e) {
         mysqli_rollback($enlace);
-        header("Location: ../../main/listado_pacientes.php?error=error_al_inactivar_usuario&detalle=" . urlencode($e->getMessage()));
+        header("Location: ../../main/listado_pacientes.php?error=error_al_inactivar_paciente&detalle=" . urlencode($e->getMessage()));
         exit();
     } finally {
         if($enlace){
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['idpaciente']) && is_num
         }
     }
 } else {
-    header("Location: ../../main/listado_pacientes.php?error=id_usuario_invalido");
+    header("Location: ../../main/listado_pacientes.php?error=id_paciente_invalido");
     exit();
 }
 ?>

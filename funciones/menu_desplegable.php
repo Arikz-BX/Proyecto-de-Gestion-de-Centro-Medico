@@ -28,7 +28,7 @@ function generarBotonRetorno() {
             $pagina_objetivo = 'index.php';
         }
     }
-    return '<li><a class="dropdown-item" href="' . htmlspecialchars($pagina_objetivo) . '">' . "Volver a Pagina Principal" . '</a></li>';
+    return '<li><a class="dropdown-item boton-retorno" href="' . htmlspecialchars($pagina_objetivo) . '">' . "Volver a Pagina Principal" . '</a></li>';
 
     //Si no hay sesión iniciada, no se muestra nada
 }
@@ -38,26 +38,40 @@ $flecha_previa_enlace = '';
 $pagina_actual = basename($_SERVER['PHP_SELF']);
 
 $mapeo_de_paginas = [
-    'agregar-medico.php' => 'medicos.php',
-    'modificar-medico.php' => 'medicos.php',
-    'agregar-paciente.php' => 'listado_pacientes.php',
-    'modificar-paciente.php' => 'listado_pacientes.php',
-    'registro-sesion.php' => 'usuarios.php', 
-    'modificar-usuario.php' => 'usuarios.php',
-    'modificar-turno.php' => 'turnos.php',
-    'agregar-turno.php' => 'turnos.php'
+    'agregar-medico.php' => ['url' => 'medicos.php', 'title' => 'Volver a Médicos'],
+    'modificar-medico.php' => ['url' =>'medicos.php', 'title' => 'Volver a Médicos'],
+    'pacientes.php' => ['url' =>'listado_pacientes.php', 'title' => 'Volver a Pacientes'],
+    'modificar-paciente.php' => ['url' =>'listado_pacientes.php', 'title' => 'Volver a Pacientes'],
+    'registro-sesion.php' => ['url' =>'usuarios.php', 'title' => 'Volver a Usuarios'], 
+    'modificar-usuario.php' => ['url' =>'usuarios.php', 'title' => 'Volver a Usuarios'],
+    'modificar-turno.php' => ['url' =>'turnos.php', 'title' => 'Volver a Turnos'],
+    'agregar-turno.php' => ['url' =>'turnos.php', 'title' => 'Volver a Turnos']
 ];
 
-if (array_key_exists($pagina_actual, $mapeo_de_paginas)) {
+if ($pagina_actual === 'modificar-usuario.php') {
     $mostrar_flecha_previa = true;
-    $flecha_previa_enlace = $mapeo_de_paginas[$pagina_actual];
+    $origen_modificar = $_GET['origen'] ?? 'usuarios_lista';
+    if ($origen_modificar === 'mi_perfil' && (isset($_SESSION['tipousuario']) && $_SESSION['tipousuario'] == 'Medico')) {
+        // Si el médico accede a su propio perfil, volver a index.php
+        $flecha_previa_enlace = 'index.php';
+        $titulo_volver_tooltip = 'Volver a Gestor de Medicos';
+    } else {
+        // Para Admin/Secretario o si el origen es 'usuarios_lista', volver a usuarios.php
+        $flecha_previa_enlace = 'usuarios.php';
+        $titulo_volver_tooltip = 'Volver a la lista de usuarios';
+    }
+} elseif (array_key_exists($pagina_actual, $mapeo_de_paginas)) {
+    $mostrar_flecha_previa = true;
+    $flecha_previa_enlace = $mapeo_de_paginas[$pagina_actual]['url'];
+    $titulo_volver_tooltip = $mapeo_de_paginas[$pagina_actual]['title'];
 }
 ?>
 <header class="d-flex justify-content-end p-3 bg-light border-bottom">
     <div class="d-flex align-items-center">
         <?php if ($mostrar_flecha_previa): ?>
             <!-- Botón "Volver a la lista" -->
-            <a href="<?php echo htmlspecialchars($flecha_previa_enlace); ?>" class="btn btn-secondary btn-sm me-2">
+            <a href="<?php echo htmlspecialchars($flecha_previa_enlace); ?>" class="btn btn-secondary btn-sm me-2 boton-retorno"
+                title="<?= htmlspecialchars($titulo_volver_tooltip); ?>">
                 ← Volver a la lista
             </a>
         <?php endif; ?>

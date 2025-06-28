@@ -32,11 +32,11 @@ if(isset($_POST["registrar"])){
         $stmt_chequear_usuario->close();
         
         // Inserta en la tabla de usuarios
-        $stmt_registrar_usuario = $enlace->prepare("INSERT INTO usuarios (nombreusuario, usuarioclave, tipousuario, estado) VALUES (?, ?, ?, 'Activo')");
+        $stmt_registrar_usuario = $enlace->prepare("INSERT INTO usuarios (nombreusuario, nombrecompleto, usuarioclave, tipousuario, estado) VALUES (?, ?, ?, ?, 'Activo')");
         if (!$stmt_registrar_usuario) {
             throw new Exception("Error al preparar la inserción de usuario: " . $enlace->error); 
         }
-        $stmt_registrar_usuario->bind_param("sss", $usuario, $clavehash, $tipousuario);
+        $stmt_registrar_usuario->bind_param("ssss", $usuario, $nombre, $clavehash, $tipousuario);
         
         if (!$stmt_registrar_usuario->execute()) {
             throw new Exception("Error al insertar el usuario: " . $stmt_registrar_usuario->error);

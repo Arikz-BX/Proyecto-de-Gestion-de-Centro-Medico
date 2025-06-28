@@ -180,7 +180,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
                 }
                 $stmt_actualizar->bind_param("ssi", $nuevo_nombreusuario, $nuevo_nombrecompleto, $idusuario_a_actualizar);
             }
+        }
         if ($stmt_actualizar->execute()) {
+            $stmt_sincronizar_medico_nombre = $enlace->prepare("UPDATE medicos SET nombrecompleto = ? WHERE idusuario = ?");
+                if ($stmt_sincronizar_medico_nombre) {
+                    $stmt_sincronizar_medico_nombre->bind_param("si", $nuevo_nombrecompleto, $idusuario_a_actualizar);
+                    if (!$stmt_sincronizar_medico_nombre->execute()) {
+                        error_log("Error al sincronizar nombrecompleto en medicos (Médico): " . $stmt_sync_medico_nombre->error);
+                    }
+                    $stmt_sincronizar_medico_nombre->close();
             if ($es_propio_usuario_a_actualizar) {
                 $_SESSION['nombreusuario'] = $nuevo_nombreusuario;
                 $_SESSION['nombrecompleto'] = $nuevo_nombrecompleto;
@@ -225,7 +233,7 @@ $enlace->close();
             <p class="error"><?= htmlspecialchars($error) ?></p>
             <p><a href="../main/usuarios.php" class="button">Volver a la lista de usuarios</a></p>
         <?php elseif (isset($idusuario) && $idusuario): ?>
-            <form action="modificar-usuario.php" method="post">
+            <form id="formularioUsuario" action="modificar-usuario.php" method="post">
                 <input type="hidden" name="idusuario" value="<?= htmlspecialchars($idusuario) ?>">
 
                 <?php if ($es_admin_logueado): ?>
@@ -316,6 +324,36 @@ $enlace->close();
     <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
 </div>    
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+<script>
+    const form = document.getElementById('formularioUsuario');
+    let formInicial = new FormData(form);
+
+    window.addEventListener('DOMContentLoaded', () => {
+        formInicial = new FormData(form);
+    });
+
+    function detectaCambios() {
+        const formActual = new FormData(form);
+        for (let [key, value] of formInicial.entries()) {
+            if (formActual.get(key) !== value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const enlacesRetorno = document.querySelectorAll('a.boton-retorno');
+    enlacesRetorno.forEach(enlace => {
+        enlace.addEventListener('click', function (e) {
+            if (detectaCambios()) {
+                const confirmacion = confirm("¿Estás seguro de que deseas cancelar los cambios?");
+                if (!confirmacion) {
+                    e.preventDefault();
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
 

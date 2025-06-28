@@ -20,7 +20,7 @@ include('../acciones/registrar_pacientes.php');
     <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="container">
         <h1 class="paciente">Registro de Nuevo Paciente</h1>
-        <form action="../acciones/registrar_pacientes.php" method="post">
+        <form id="formularioPaciente" action="../acciones/registrar_pacientes.php" method="post">
             <div class="formulario">
                 <p>Nombre Paciente: <input type="text" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$" required placeholder="Ingrese el Nombre" name="nombrepaciente" class="form-control"></p>
                 <p>DNI: <input type="text" id="dni" minlength="8" pattern="^\d{8}$" required placeholder="Ingrese el Documento" name="dni" class="form-control"></p>
@@ -33,13 +33,43 @@ include('../acciones/registrar_pacientes.php');
                 <button type="submit" name="guardar_paciente">Guardar Paciente</button>
             </div>
     </form>
-            <a href="listado_pacientes.php">
+       <!-- <a href="listado_pacientes.php">
                 <button type="submit" class="button">Listado de Pacientes</button>
-            </a>
+            </a> -->
 </div>
 <div class= footer>
         <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+<script>
+    const form = document.getElementById('formularioPaciente');
+    let formInicial = new FormData(form);
+
+    window.addEventListener('DOMContentLoaded', () => {
+        formInicial = new FormData(form);
+    });
+
+    function detectaCambios() {
+        const formActual = new FormData(form);
+        for (let [key, value] of formInicial.entries()) {
+            if (formActual.get(key) !== value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const enlacesRetorno = document.querySelectorAll('a.boton-retorno');
+    enlacesRetorno.forEach(enlace => {
+        enlace.addEventListener('click', function (e) {
+            if (detectaCambios()) {
+                const confirmacion = confirm("¿Estás seguro de que deseas cancelar los cambios?");
+                if (!confirmacion) {
+                    e.preventDefault();
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>

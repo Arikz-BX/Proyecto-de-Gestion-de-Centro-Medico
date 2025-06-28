@@ -81,18 +81,21 @@ if (isset($_POST['idmedico'], $_POST['idpaciente'], $_POST['fecha'], $_POST['lug
              header('Location: ../../main/registro-turnos.php?error=turno_fuera_agenda'); //Cambiada la logica de como mostrar los Errores.
         }
         $consulta = "INSERT INTO turnos (idmedico, idpaciente, nombrepaciente, nombremedico, fecha, lugar, observacion, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-          $stmt = $enlace->prepare($consulta);
-          if ($stmt) {
-            $fecha_insertar = $fecha_turno->format('Y-m-d H:i:s');
-            $stmt->bind_param("iissssss", $idmedico, $idpaciente, $nombre_paciente, $nombre_medico, $fecha_insertar, $lugar, $observacion, $estado);
-            if ($stmt->execute()) {
-                header("Location: ../main/turnos.php?success=turno_registrado");
-                exit();
-            } else {
-                header ('Location: ../../main/registro-turnos.php?error=fallo_de_registro'); //Cambiada la logica de como mostrar los Errores.
-            }
+        $stmt_update_paciente = $enlace->prepare("UPDATE pacientes SET estado = 'En Tratamiento' WHERE idpaciente = ?");
+        $stmt_update_paciente->bind_param("i", $idpaciente); 
+        $stmt_update_paciente->close();
+        $stmt = $enlace->prepare($consulta);
+        if ($stmt) {
+          $fecha_insertar = $fecha_turno->format('Y-m-d H:i:s');
+          $stmt->bind_param("iissssss", $idmedico, $idpaciente, $nombre_paciente, $nombre_medico, $fecha_insertar, $lugar, $observacion, $estado);
+          if ($stmt->execute()) {
+              header("Location: ../main/turnos.php?success=turno_registrado");
+              exit();
+          } else {
+              header ('Location: ../../main/registro-turnos.php?error=fallo_de_registro'); //Cambiada la logica de como mostrar los Errores.
+          }
 
-            $stmt->close();
+          $stmt->close();
         } else {
             header ('Location: ../../main/registro-turnos.php?error=error_consulta_db'); //Cambiada la logica de como mostrar los Errores.
         }

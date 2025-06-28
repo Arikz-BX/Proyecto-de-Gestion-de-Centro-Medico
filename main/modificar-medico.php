@@ -48,13 +48,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idmedico']) && is_num
             $especialidad = $fila['especialidad'];
             $estado = $fila['estado'];
         } else {
-            $error = "Paciente no encontrado.";
+            $error = "Medico no encontrado.";
         }
         $stmt->close();
     } else {
         $error = "Error en la consulta de selección.";
     }
 }
+$readonly = ($estado === 'Inactivo') ? 'readonly' : '';
+$disabled = ($estado === 'Inactivo') ? 'disabled' : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
     $idmedico     = (int) $_POST['idmedico'];
@@ -76,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
         if ($stmt) {
             $stmt->bind_param("sssssssssi", $nuevo_nombre, $nuevo_dni, $nueva_matricula, $nuevo_consultorio, $nueva_direccion, $nuevo_telefono, $nuevo_correo, $nueva_especialidad, $nuevo_estado, $idmedico);
             if ($stmt->execute()) {
-                header("Location: ../main/medicos.php?mensaje=medico_actualizado");
+                header("Location: ../main/medicos.php?success=medico_modificado");
                 exit;
             } else {
                 $error = "Error al actualizar el medico.";
@@ -111,45 +113,47 @@ $enlace->close();
         <p class="error"><?= htmlspecialchars($error) ?></p>
         <p><a href="../main/medicos.php" class="button">Volver a la lista de medicos</a></p>
     <?php elseif ($idmedico): ?>
-        <form action="modificar-medico.php" method="post">
+        <form id="formularioMedico" action="modificar-medico.php" method="post">
             <input type="hidden" name="idmedico" value="<?= $idmedico ?>">
     
             <div class="formulario">
                 <label for="nombremedico">Nombre del Medico:</label>
                 <input type="text" id="nombremedico" name="nombremedico"
-                        value="<?= htmlspecialchars($nombremedico) ?>" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$" maxlength="255" class="form-control" required>
+                        value="<?= htmlspecialchars($nombremedico) ?>" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$" maxlength="255" class="form-control" required <?= $disabled ?>>
                 <label for="dni">DNI:</label>
                 <input type="text" id="dni" name="dni"
-                        value="<?= htmlspecialchars($dni) ?>" pattern="^\d{10}$" maxlength="10" class="form-control" required >
+                        value="<?= htmlspecialchars($dni) ?>" pattern="^\d{8,10}$" maxlength="10" class="form-control" required <?= $disabled ?>>
                 <label for="matricula">Matricula:</label>
                 <input type="text" id="matricula" name="matricula"
-                        value="<?= htmlspecialchars($matricula) ?>" pattern="^\d{12}$" maxlength="12" class="form-control" required>
+                        value="<?= htmlspecialchars($matricula) ?>" pattern="^\d{12}$" maxlength="12" class="form-control" required <?= $disabled ?>>
                 <label for="consultorio">Consultorio:</label>
                 <input type="text" id="consultorio" name="consultorio"
-                        value="<?= htmlspecialchars($consultorio) ?>" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,#-]*$" maxlength="255" class="form-control" required>
+                        value="<?= htmlspecialchars($consultorio) ?>" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,#-]*$" maxlength="255" class="form-control" required <?= $disabled ?>>
                 <label for="direccion">Direccion de Domicilio:</label>
                 <input type="text" id="direccion" name="direccion"
-                        value="<?= htmlspecialchars($direccion) ?>" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,#-]*$" maxlength="255" class="form-control" required>
+                        value="<?= htmlspecialchars($direccion) ?>" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,#-]*$" maxlength="255" class="form-control" required <?= $disabled ?>>
                 <label for="telefono">Telefono:</label>
                 <input type="text" id="telefono" name="telefono"
-                        value="<?= htmlspecialchars($telefono) ?>" pattern="^\+?\d{9,10}$" maxlength="10" class="form-control" required>
+                        value="<?= htmlspecialchars($telefono) ?>" pattern="^\+?\d{9,10}$" maxlength="10" class="form-control" required <?= $disabled ?>>
                 <label for="correo">Correo:</label>
                 <input type="text" id="correo" name="correo"
-                        value="<?= htmlspecialchars($correo) ?>" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" maxlength="255" class="form-control" required>
+                        value="<?= htmlspecialchars($correo) ?>" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" maxlength="255" class="form-control" required <?= $disabled ?>>
                 <label for="especialidad">Especialidad:</label>
                 <input type="text" id="especialidad" name= "especialidad"
-                        value="<?= htmlspecialchars($especialidad) ?>" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s,-]+$" maxlength="255" class="form-control" required>
+                        value="<?= htmlspecialchars($especialidad) ?>" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s,-]+$" maxlength="255" class="form-control" required <?= $disabled ?>>
                 <label for="estado">Estado:</label>
-                <select id="estado" name="estado" class="form-control" required>
+                <select id="estado" name="estado" class="form-control" required <?= $disabled ?>>
                 <option value="Activo" <?php if ($estado === 'Activo') echo 'selected'; ?>>Activo</option>
                 <option value="Inactivo" <?php if ($estado === 'Inactivo') echo 'selected'; ?>>Inactivo</option>
                 <option value="Licencia" <?php if ($estado === 'Licencia') echo 'selected'; ?>>Licencia</option>
                 </select>
             </div>
+            <?php if (!$readonly): ?>
             <div class=formulario>
                 <button type="submit" name="guardar">Guardar Cambios</button>
                 <!-- <a href="../main/medicos.php" class="button" onclick="return confirm('¿Estás seguro de que deseas cancelar los cambios?');">Cancelar</a> -->
             </div>
+            <?php endif; ?>
         </form>
     <?php else: ?>
         <p>No se ha seleccionado ningún medico para modificar.</p>
@@ -160,5 +164,35 @@ $enlace->close();
     <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
     </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+<script>
+    const form = document.getElementById('formularioMedico');
+    let formInicial = new FormData(form);
+
+    window.addEventListener('DOMContentLoaded', () => {
+        formInicial = new FormData(form);
+    });
+
+    function detectaCambios() {
+        const formActual = new FormData(form);
+        for (let [key, value] of formInicial.entries()) {
+            if (formActual.get(key) !== value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const enlacesRetorno = document.querySelectorAll('a.boton-retorno');
+    enlacesRetorno.forEach(enlace => {
+        enlace.addEventListener('click', function (e) {
+            if (detectaCambios()) {
+                const confirmacion = confirm("¿Estás seguro de que deseas cancelar los cambios?");
+                if (!confirmacion) {
+                    e.preventDefault();
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>

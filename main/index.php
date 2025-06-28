@@ -54,7 +54,7 @@ if (isset($_GET['success'])) {
             <!-- <a href="agenda.php" class="dashboard-icon">
                 <img src="../estilos/agenda.ico" alt="Médicos"> <p>Agenda</p>
             </a> -->
-            <a href="modificar-usuario.php" class="dashboard-icon">
+            <a href="modificar-usuario.php?origen=mi_perfil" class="dashboard-icon">
                    <img src="../estilos/usuarioscheck.ico" alt="Perfil"> <p>Mi Perfil</p>
             </a>
             <a href="listado_pacientes.php" class="dashboard-icon">
@@ -62,6 +62,16 @@ if (isset($_GET['success'])) {
             </a>
         </div>
     </div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast align-items-center text-white bg-<?php echo $tipo_toast; ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+                <div class="toast-body">
+                    <?php echo htmlspecialchars($mensaje_toast); ?>
+                </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+        </div>
+    </div>
+</div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // PHP pasa el mensaje a JavaScript

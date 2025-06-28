@@ -28,25 +28,38 @@ if (isset($_POST['guardar_paciente'])) {
     }
 
     if (empty($error)) {
-        $stmt = $enlace->prepare("INSERT INTO pacientes (nombrepaciente, dni, obrasocial, direccion, telefono, correoelectronico, notas) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssss", $nombrepaciente, $dni, $obrasocial, $direccion, $telefono, $correoelectronico, $notas);
-
-        if ($stmt->execute()) {
-            $success = "Paciente registrado correctamente."; //Registra al paciente sin problemas.
+        $check_stmt = $enlace->prepare("SELECT idpaciente FROM pacientes WHERE dni = ?");
+        $check_stmt->bind_param("s", $dni);
+        $check_stmt->execute();
+        $check_stmt->store_result();
+        if ($check_stmt->num_rows > 0) {
+            $error = "Ya existe un paciente registrado con ese DNI.";
             echo "<script>
-                    alert('$success');
-                    header(../main/listado_pacientes?success=paciente_registrado.php);
-                  </script>";
-            exit(); 
-        } else {
-            $error = "Error al registrar el paciente: " . $stmt->error; //No Registra por un error del statement.
-            echo "<script>
-                    alert('$error');
-                    window.location = '../main/pacientes.php';
-                  </script>";
+                alert('$error');
+                window.location = '../main/indexadmin.php';
+              </script>";
             exit();
+        } else {
+            $stmt = $enlace->prepare("INSERT INTO pacientes (nombrepaciente, dni, obrasocial, direccion, telefono, correoelectronico, notas) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssss", $nombrepaciente, $dni, $obrasocial, $direccion, $telefono, $correoelectronico, $notas);
+            if ($stmt->execute()) {
+                $success = "Paciente registrado correctamente."; //Registra al paciente sin problemas.
+                echo "<script>
+                        alert('$success');
+                        window.location = '../main/listado_pacientes?success=paciente_registrado.php';
+                      </script>";
+                exit(); 
+            } else {
+                $error = "Error al registrar el paciente: " . $stmt->error; //No Registra por un error del statement.
+                echo "<script>
+                        alert('$error');
+                        window.location = '../main/pacientes.php';
+                      </script>";
+                exit();
         }
         $stmt->close();
+    }
+    $check_stmt->close();
     } else {
         echo "<script>
                 alert('$error'); 

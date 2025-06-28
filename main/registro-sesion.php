@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', manejarMatricula);
     <?php include('../funciones/menu_desplegable.php'); ?> <!-- 13/6 Guarde el Menu Desplegable en funciones para que no ocupar menos lineas. -->
     <div class="formulario">
         <h1>Guardar Usuario</h1>
-        <form action="../acciones/loginreg/registrar.php" method="post">
+        <form id="formularioUsuario" action="../acciones/loginreg/registrar.php" method="post">
             <div class="username">
             <p>Usuario <input type="text" required placeholder="Ingrese un Usuario" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s]+$" name="usuario"></p>
             </div>
@@ -60,5 +60,35 @@ document.addEventListener('DOMContentLoaded', manejarMatricula);
         <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+<script>
+    const form = document.getElementById('formularioUsuario');
+    let formInicial = new FormData(form);
+
+    window.addEventListener('DOMContentLoaded', () => {
+        formInicial = new FormData(form);
+    });
+
+    function detectaCambios() {
+        const formActual = new FormData(form);
+        for (let [key, value] of formInicial.entries()) {
+            if (formActual.get(key) !== value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const enlacesRetorno = document.querySelectorAll('a.boton-retorno');
+    enlacesRetorno.forEach(enlace => {
+        enlace.addEventListener('click', function (e) {
+            if (detectaCambios()) {
+                const confirmacion = confirm("¿Estás seguro de que deseas cancelar los cambios?");
+                if (!confirmacion) {
+                    e.preventDefault();
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>

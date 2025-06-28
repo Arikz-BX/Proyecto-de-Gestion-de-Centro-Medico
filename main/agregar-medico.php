@@ -2,18 +2,8 @@
 session_start();
 include('../conexion/conexionbasededatos.php');
 $idusuario_precargado = null;
-$selected_nombrecompleto = '';
-$selected_matricula = '';
-$selected_dni = '';
-$selected_consultorio = '';
-$selected_direccion = '';
-$selected_telefono = '';
-$selected_correo = '';
-$selected_especialidad = '';
-
 function listMedicos($enlace)
 {
-// Selecciona todos los datos relevantes del usuario (nombre de login) y del médico.
 // Usamos LEFT JOIN para incluir usuarios que son médicos pero aún no tienen un registro completo en 'medicos'. 
     $medicossql = "SELECT u.idusuario, u.nombrecompleto, 
                m.idmedico, m.matricula, m.dni, m.consultorio, m.direcciondomicilio, m.telefono, m.correo, m.especialidad, m.estado
@@ -23,19 +13,25 @@ function listMedicos($enlace)
         AND (
                 m.idmedico IS NULL OR               -- Si no hay registro en 'medicos' (perfil incompleto)
                 m.matricula = '' OR m.matricula = '0' OR -- Matrícula vacía o '0' (indicador de incompleto)
-                m.dni = '' OR                       -- DNI vacío
-                m.consultorio = '' OR               -- Consultorio vacío
-                m.direcciondomicilio = '' OR        -- Dirección vacía
-                m.telefono = '' OR                  -- Teléfono vacío
-                m.correo = '' OR                    -- Correo vacío
-                m.especialidad = '' OR              -- Especialidad vacía
-                m.estado = '' OR m.estado IS NULL   -- Estado vacío o nulo (no 'Activo', 'Inactivo', 'Licencia')
+                m.dni IS NULL OR m.dni = '' OR                        -- DNI vacío
+                m.consultorio IS NULL OR m.consultorio = '' OR              -- Consultorio vacío
+                m.direcciondomicilio IS NULL OR m.direcciondomicilio = '' OR  -- Dirección vacía
+                m.telefono IS NULL OR m.telefono = '' OR                      -- Teléfono vacío
+                m.correo IS NULL OR m.correo = '' OR               -- Correo vacío
+                m.especialidad IS NULL OR m.especialidad = ''         -- Especialidad vacía
             )
-        ORDER BY u.nombreusuario"; 
+        ORDER BY u.nombrecompleto ASC"; 
     $resultado = $enlace->query($medicossql);
     return $resultado;
 }
-
+$selected_nombrecompleto = '';
+$selected_matricula = '';
+$selected_dni = '';
+$selected_consultorio = '';
+$selected_direccion = '';
+$selected_telefono = '';
+$selected_correo = '';
+$selected_especialidad = '';
 // Obtener la lista de médicos para el dropdown
 $medicos_para_formulario = listMedicos($enlace);
 if (isset($_GET['idusuario_precargado']) && is_numeric($_GET['idusuario_precargado'])) {
@@ -46,7 +42,7 @@ if (isset($_GET['idusuario_precargado']) && is_numeric($_GET['idusuario_precarga
                                               m.matricula, m.dni, m.consultorio, m.direcciondomicilio, m.telefono, m.correo, m.especialidad 
                                       FROM usuarios u
                                       LEFT JOIN medicos m ON u.idusuario = m.idusuario
-                                      WHERE u.idusuario = ?");
+                                      WHERE u.idusuario = ? AND u.tipousuario = 'Medico'");
     if ($stmt_precarga) {
         $stmt_precarga->bind_param("i", $idusuario_precargado);
         $stmt_precarga->execute();
@@ -110,21 +106,21 @@ if (isset($_GET['idusuario_precargado']) && is_numeric($_GET['idusuario_precarga
                     ?>
                 </select>
                 <label for="nombrecompleto">Nombre Medico:</label>
-                <input type="text" id="nombrecompleto" name="nombrecompleto" value="<?php echo $selected_nombrecompleto; ?>" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$" required>
+                <input type="text" id="nombrecompleto" name="nombrecompleto" class="form-control" value="<?php echo $selected_nombrecompleto; ?>" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$" required>
                 <label for="dni">DNI:</label>
-                <input type="text" id="dni" minlength="8" name="dni" value="<?php echo $selected_dni; ?>" pattern="^\d{8}$" required>
+                <input type="text" id="dni" minlength="8" name="dni" class="form-control" value="<?php echo $selected_dni; ?>" pattern="^\d{8}$" required>
                 <label for="consultorio">Consultorio:</label>
-                <input type="text" id="consultorio" minlength="12" name="consultorio" value="<?php echo $selected_consultorio; ?>" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,#-]*$" required>
+                <input type="text" id="consultorio" minlength="12" name="consultorio" class="form-control" value="<?php echo $selected_consultorio; ?>" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,#-]*$" required>
                 <label for="direccion">Dirección de Domicilio:</label>
-                <input type="text" id="direccion" minlength="12" name="direccion" value="<?php echo $selected_direccion; ?>" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,#-]*$" required>
+                <input type="text" id="direccion" minlength="12" name="direccion" class="form-control" value="<?php echo $selected_direccion; ?>" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s.,#-]*$" required>
                 <label for="telefono">Teléfono:</label>
-                <input type="text" id="telefono" minlength="9" maxlength="10" value="<?php echo $selected_telefono; ?>" name="telefono" pattern="^\+?\d{9,15}$" required>
+                <input type="text" id="telefono" minlength="9" maxlength="10" value="<?php echo $selected_telefono; ?>" name="telefono" class="form-control" pattern="^\+?\d{9,15}$" required>
                 <label for="correo">Correo:</label>
-                <input type="email" id="correo" minlength="16" name="correo" value="<?php echo $selected_correo; ?>" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
+                <input type="email" id="correo" minlength="16" name="correo" class="form-control" value="<?php echo $selected_correo; ?>" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
                 <label for="especialidad">Especialidad:</label>
-                <input type="text" id="especialidad" name="especialidad" value="<?php echo $selected_especialidad; ?>" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s,-]+$" required>
+                <input type="text" id="especialidad" name="especialidad" class="form-control" value="<?php echo $selected_especialidad; ?>" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s,-]+$" required>
                 <button type="submit" class="button">Agregar Médico</button>
-                <a href="medicos.php" class="button" onclick="return confirm('¿Estás seguro de que deseas cancelar el Registro del Medico?');">Cancelar</a>
+                <!--<a href="medicos.php" class="button" onclick="return confirm('¿Estás seguro de que deseas cancelar el Registro del Medico?');">Cancelar</a>-->
             </form>
         </div>
     </div>
@@ -161,6 +157,36 @@ if (isset($_GET['idusuario_precargado']) && is_numeric($_GET['idusuario_precarga
                 selectMedico.dispatchEvent(new Event('change')); // Dispara el evento 'change'
             }
         };
+    </script>
+    <script>
+    const form = document.getElementById('formularioMedico');
+    let formInicial = new FormData(form);
+
+    window.addEventListener('DOMContentLoaded', () => {
+        formInicial = new FormData(form);
+    });
+
+    function detectaCambios() {
+        const formActual = new FormData(form);
+        for (let [key, value] of formInicial.entries()) {
+            if (formActual.get(key) !== value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const enlacesRetorno = document.querySelectorAll('a.boton-retorno');
+    enlacesRetorno.forEach(enlace => {
+        enlace.addEventListener('click', function (e) {
+            if (detectaCambios()) {
+                const confirmacion = confirm("¿Estás seguro de que deseas cancelar los cambios?");
+                if (!confirmacion) {
+                    e.preventDefault();
+                }
+            }
+        });
+    });
     </script>
 </body>
 </html>

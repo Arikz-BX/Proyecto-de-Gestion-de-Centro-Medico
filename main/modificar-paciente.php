@@ -9,7 +9,7 @@ if (!isset($_SESSION['tipousuario'])) {
 
 if ($_SESSION['tipousuario'] != 'Secretario' && $_SESSION['tipousuario'] != 'Administrador'){
     echo 'Error: Acceso no Autorizado.';
-    header("Location: ../main/pacientes.php?mensaje=no_autorizado"); 
+    header("Location: ../main/listado_pacientes.php?info=no_autorizado"); 
     exit();
 }
 
@@ -53,6 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idpaciente']) && is_n
         $error = "Error en la consulta de selección.";
     }
 }
+$readonly = ($estado === 'Dado de Alta') ? 'readonly' : '';
+$disabled = ($estado === 'Dado de Alta') ? 'disabled' : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
     $idpaciente      = (int) $_POST['idpaciente'];
@@ -73,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guardar'])) {
         if ($stmt) {
             $stmt->bind_param("ssssssssi", $nuevo_nombre, $nuevo_dni, $nueva_obrasocial, $nueva_direccion, $nuevo_telefono, $nuevo_correo, $nuevo_estado, $nuevas_notas, $idpaciente);
             if ($stmt->execute()) {
-                header("Location: ../main/pacientes.php?mensaje=paciente_actualizado");
+                header("Location: ../main/listado_pacientes.php?success=paciente_modificado");
                 exit;
             } else {
                 $error = "Error al actualizar el paciente.";
@@ -108,51 +110,82 @@ $enlace->close();
             <p class="error"><?= htmlspecialchars($error) ?></p>
             <p><a href="../main/pacientes.php" class="button">Volver a la lista de pacientes</a></p>
         <?php elseif ($idpaciente): ?>
-            <form action="modificar-paciente.php" method="post">
+            <form id="formularioPaciente" action="modificar-paciente.php" method="post">
                 <input type="hidden" name="idpaciente" value="<?= $idpaciente ?>">
 
                 <div class="formulario">
                     <label for="nombrepaciente">Nombre del Paciente:</label>
                     <input type="text" id="nombrepaciente" name="nombrepaciente" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$"
-                            value="<?= htmlspecialchars($nombrepaciente) ?>" maxlength="255" class="form-control" required>
+                            value="<?= htmlspecialchars($nombrepaciente) ?>" maxlength="255" class="form-control" required <?= $disabled ?>>
                     <label for="dni">DNI:</label>
                     <input type="text" id="dni" name="dni"
-                            value="<?= htmlspecialchars($dni) ?>" maxlength="10" class="form-control" required>
+                            value="<?= htmlspecialchars($dni) ?>" maxlength="10" class="form-control" required <?= $disabled ?>>
                     <label for="obrasocial">Obra Social:</label>
                     <input type="text" id="obrasocial" name="obrasocial"
-                            value="<?= htmlspecialchars($obrasocial) ?>" maxlength="255" class="form-control" required>
+                            value="<?= htmlspecialchars($obrasocial) ?>" maxlength="255" class="form-control" required <?= $disabled ?>>
                     <label for="direccion">Direccion:</label>
                     <input type="text" id="direccion" name="direccion"
-                            value="<?= htmlspecialchars($direccion) ?>" maxlength="255" class="form-control" required>
+                            value="<?= htmlspecialchars($direccion) ?>" maxlength="255" class="form-control" required <?= $disabled ?>>
                     <label for="telefono">Telefono:</label>
                     <input type="text" id="telefono" name="telefono"
-                            value="<?= htmlspecialchars($telefono) ?>" maxlength="10" class="form-control" required>
+                            value="<?= htmlspecialchars($telefono) ?>" maxlength="10" class="form-control" required <?= $disabled ?>>
                     <label for="correoelectronico">Correo:</label>
                     <input type="text" id="correoelectronico" name="correoelectronico"
-                            value="<?= htmlspecialchars($correo) ?>" maxlength="255" class="form-control" required>
+                            value="<?= htmlspecialchars($correo) ?>" maxlength="255" class="form-control" required <?= $disabled ?>>
                     <label for="estado">Estado:</label>
-                    <select id="estado" name="estado" class="form-control" required>
+                    <select id="estado" name="estado" class="form-control" required <?= $disabled ?>>
                     <option value="En Espera" <?php if ($estado === 'En Espera') echo 'selected'; ?>>En Espera</option>
                     <option value="En Tratamiento" <?php if ($estado === 'En Tratamiento') echo 'selected'; ?>>En Tratamiento</option>
                     <option value="Dado de Alta" <?php if ($estado === 'Dado de Alta') echo 'selected'; ?>>Dado de Alta</option>
                     </select>
                     <label for="notas">Notas:</label>
-                    <textarea id="notas" name="notas"
-                            value="<?= htmlspecialchars($notas) ?>" maxlength="650" rows="3" class="form-control" required></textarea>
+                    <textarea id="notas" name="notas" maxlength="650" rows="3" class="form-control" required <?= $disabled ?>><?= htmlspecialchars($notas) ?> </textarea>
                 </div>
-                <div class="formulario">
-                    <button type="submit" name="guardar">Guardar Cambios</button>
-                    <a href="../main/listado-pacientes.php" class="button" onclick="return confirm('¿Estás seguro de que deseas cancelar los cambios?');">Cancelar</a>
-                </div>
+                <?php if (!$readonly): ?>
+                    <div class="formulario">
+                        <button type="submit" name="guardar">Guardar Cambios</button>
+                        <!-- <a href="../main/listado_pacientes.php" class="button" onclick="return confirm('¿Estás seguro de que deseas cancelar los cambios?');">Cancelar</a> -->
+                    </div>
+                <?php endif; ?>
             </form>
         <?php else: ?>
             <p>No se ha seleccionado ningún paciente para modificar.</p>
-            <a href="../main/listado-pacientes.php" class="button">Volver a la lista de pacientes</a>
+            <a href="../main/listado_pacientes.php" class="button">Volver a la lista de pacientes</a>
         <?php endif; ?>
     </div>
     <div class= footer>
         <h2>Alumno: Tobias Ariel Monzon Proyecto de Centro Medico</h2> 
     </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+<script>
+    const form = document.getElementById('formularioPaciente');
+    let formInicial = new FormData(form);
+
+    window.addEventListener('DOMContentLoaded', () => {
+        formInicial = new FormData(form);
+    });
+
+    function detectaCambios() {
+        const formActual = new FormData(form);
+        for (let [key, value] of formInicial.entries()) {
+            if (formActual.get(key) !== value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const enlacesRetorno = document.querySelectorAll('a.boton-retorno');
+    enlacesRetorno.forEach(enlace => {
+        enlace.addEventListener('click', function (e) {
+            if (detectaCambios()) {
+                const confirmacion = confirm("¿Estás seguro de que deseas cancelar los cambios?");
+                if (!confirmacion) {
+                    e.preventDefault();
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
